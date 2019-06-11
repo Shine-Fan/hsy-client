@@ -27,7 +27,7 @@ export default {
   // },
   data(){
     return {
-      headNews:"@/assets/logo.png"
+      headNews:require('@/assets/logo.png')
     }
   }
   // props:{
