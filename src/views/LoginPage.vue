@@ -7,27 +7,20 @@
             <input type="submit" value="'登陆" v-on:click="LoginPost"/>
             <br/>
             <br/>
-            <div>input<p>{{ userName }}{{ userPWD }}</p></div>
+
+            <div>input,做参考用，实际版本应当删除<p>userName:{{ userName }}</p><p> password:{{ userPWD }}</p></div>
         </div>
     </div>
 </template>
 
 <script>
+    /* eslint-disable no-console */
+
     import Vue from "vue";
     import axios from 'axios'
 
     Vue.use(axios);
     var defaultData={userName:"defaultUserName",userPWD:90000};
-    window.onload = function () {
-        // Vue.component("pr",{
-        //     name:"pr",
-        //     template:""
-        // })
-        var vm = new Vue({
-            // el: '#LoginBody',
-            data:defaultData,
-        });
-    };
 
     export default {
         name: 'LoginPage',

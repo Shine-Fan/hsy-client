@@ -1,4 +1,4 @@
-# hsy-proj
+# hsy-client
 
 ## Project setup
 ```
