@@ -3,13 +3,13 @@
         <h1>This is Login page</h1>
         <div class="input-group justify-content-center">
             <div class="input-group col-md-8 mb-1">
-                <div class="input-group-prepend col-md-3">
+                <div class="input-group-prepend">
                     <label class="input-group-text">用户名</label>
                 </div>
                 <input type="text" v-model="userName" class="form-control"/>
             </div>
-            <div class="input-group col-md-8">
-                <div class="input-group-prepend col-md-3 mb-1">
+            <div class="input-group col-md-8  mb-1">
+                <div class="input-group-prepend">
                     <label class="input-group-text">密 码</label>
                 </div>
                 <input type="password" v-model="userPWD" class="form-control"/>
@@ -25,38 +25,43 @@
 
 <script>
     /* eslint-disable no-console */
-
-    import Vue from "vue";
-    import axios from 'axios'
-
-    Vue.use(axios);
-    // var defaultData={userName:"defaultUserName",userPWD:90000};
+    // var defaultData={username:"zhangsan",password:"123456"};
 
     export default {
         name: 'LoginPage',
-        props:{
-            userName:String,
-            userPWD:String,
+        data(){
+            return {
+                userName:"zhangsan",
+                userPWD:"123456",
+            }
         },
         methods:{
             LoginPost: function(){
-                console.log("func triggered");
-                axios.post('http://192.168.46.105:8080/login',{
-                    username:this.userName,
-                    password:this.userPWD
+                console.log("send request");
+                console.log(this.userName+this.userPWD);
+                // axios({
+                this.$ajax({
+                    method:'post',
+                    url:"http://192.168.46.112:8080/login",
+                    headers: {'content-type': 'application/x-www-form-urlencoded'},
+                    data: {
+                        username: this.userName,
+                        password: this.userPWD
+                    }
+                    // data:JSON.stringify(defaultData)
                 })
-                    .then(response => (this.info = response
-                    ))
+                    .then(response => {
+                        this.info = response;
+                        console.log(this.info);
+                    })
                     .catch(function (error) { // 请求失败处理
+                        console.log("catached");
                         console.log(error);
                     });
             }
         }
     }
 </script>
-
-
-
 <style scoped>
 
 </style>

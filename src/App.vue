@@ -2,10 +2,11 @@
   <div id="app">
     <p id="loginStatus"><router-link to="/Login">Login</router-link></p>
     <div id="nav">
-      <router-link to="/">新闻</router-link> |
-      <router-link to="/about">论坛</router-link>
+      <router-link to="/">新闻</router-link>|
+      <router-link to="/BBS">论坛</router-link>
     </div>
     <router-view/>
+    <div id="footer">这里是封底</div>
   </div>
 </template>
 
@@ -19,6 +20,7 @@
 }
 #nav {
   padding: 30px;
+  background-color: #42b983;
 }
 
 #nav a {
@@ -27,7 +29,7 @@
 }
 
 #nav a.router-link-exact-active {
-  color: #42b983;
+  color: cornsilk;
 }
 
 #loginStatus {
@@ -41,5 +43,9 @@
 #loginStatus  a {
   font-weight: bold;
   color: #2c3e50;
+}
+
+#footer {
+  background-color: #42b983;
 }
 </style>
