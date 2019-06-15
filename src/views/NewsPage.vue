@@ -7,6 +7,7 @@
     <h2>头条新闻</h2>
     <div class="swiper_container">
       <ul>
+<!--        <TopNews title="" img="" content="">-->
         <li><a href="#" target="_blank" rel="noopener">babel</a></li>
         <li><a href="#" target="_blank" rel="noopener">eslint</a></li>
       </ul>
