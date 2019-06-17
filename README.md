@@ -1,5 +1,7 @@
 # hsy-client
 
+新闻页面参考今日头条https://www.toutiao.com/ch/news_hot/
+
 ###2019/06/11
 
 项目使用了vue.js框架，使用了vue-router,vuex,scss。外观引用了bootstrap-vue。还有eslint
