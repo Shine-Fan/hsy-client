@@ -42,8 +42,9 @@
                 // axios({
                 this.$ajax({
                     method:'post',
+                    // url:"http://192.168.46.112:8080/login",
                     url:"http://192.168.46.112:8080/login",
-                    headers: {'content-type': 'application/x-www-form-urlencoded'},
+                    headers: {'content-type': 'application/json'},
                     data: {
                         username: this.userName,
                         password: this.userPWD
@@ -57,6 +58,8 @@
                     .catch(function (error) { // 请求失败处理
                         console.log("catached");
                         console.log(error);
+                        alert("login fail");
+                        // location.reload()
                     });
             }
         }
