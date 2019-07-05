@@ -8,10 +8,13 @@
             <router-link :to="{name:'main'}" style="font-size:large;padding-right:1rem">首页</router-link>
           </li>
           <li class="nav-item">
+            <router-link :to="{name:'community'}" style="font-size:large;padding-right:1rem">社群</router-link>
+          </li>
+          <li class="nav-item">
             <router-link :to="{name:'news'}" style="font-size:large;padding-right:1rem">新闻</router-link>
           </li>
           <li class="nav-item">
-            <router-link :to="{name:'community'}" style="font-size:large;padding-right:1rem">社群</router-link>
+            <router-link :to="{name:'info'}" style="font-size:large;padding-right:1rem">行情</router-link>
           </li>
         </ul>
       </div>
