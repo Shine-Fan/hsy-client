@@ -1,12 +1,7 @@
 <template>
     <div style="display:flex;flex-direction:column;justify-content:center;flex-wrap: nowrap;" >
-        <div style="display:flex;justify-content:center;flex-wrap: nowrap;height:400px">
-            <div style="display:flex;" class="overflow-auto">
-                <b-list-group>
-                    <b-list-group-item href="#" @click="to_news_type(1,index)" class="list-group-item" v-for="(item,index) in news_type_names1" :key="index" disabled>{{item}}</b-list-group-item>
-                </b-list-group>
-            </div>
-            <div style="display:flex;flex-wrap:nowrap">
+        <div style="display:flex;justify-content:center;flex-wrap: nowrap">
+            <div style="display:flex;flex-wrap:nowrap;width:1000px">
                 <b-carousel
                         id="carousel-fade"
                         style="text-shadow: 0px 0px 2px #000;display: flex"
@@ -19,11 +14,11 @@
                     ></b-carousel-slide>
                 </b-carousel>
             </div>
-            <div style="display:flex;" class="overflow-auto">
-                <b-list-group>
-                    <b-list-group-item href="#" @click="to_news_type(2,index)" class="list-group-item" v-for="(item,index) in info_type_names1" :key="index">{{item}}</b-list-group-item>
-                </b-list-group>
-            </div>
+<!--            <div style="display:flex;" class="overflow-auto">-->
+<!--                <b-list-group>-->
+<!--                    <b-list-group-item href="#" @click="to_news_type(2,index)" class="list-group-item" v-for="(item,index) in info_type_names1" :key="index">{{item}}</b-list-group-item>-->
+<!--                </b-list-group>-->
+<!--            </div>-->
         </div>
         <div style="display:flex;justify-content: center;flex-direction: column">
             <div style="display:flex;justify-content: center;flex-direction: column;flex-wrap: nowrap;margin-top:3rem">
@@ -37,25 +32,9 @@
                         <b-tab v-for="(item,index) in community_names" :key="index" :title="item">
                             <div>
                                 <b-card-group deck>
-                                    <b-card title="Title" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
+                                    <b-card v-for="(item,index) in community_info" :title="item.title" :img-src="item.img_src" img-alt="Image" img-top>
                                         <b-card-text>
-                                            This is a wider card with supporting text below as a natural lead-in to additional content.
-                                            This content is a little bit longer.
-                                        </b-card-text>
-                                        <div slot="footer" style="display:flex;justify-content: flex-end"><button class="btn-primary">详情>></button></div>
-                                    </b-card>
-
-                                    <b-card title="Title" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
-                                        <b-card-text>
-                                            This card has supporting text below as a natural lead-in to additional content.
-                                        </b-card-text>
-                                        <div slot="footer" style="display:flex;justify-content: flex-end"><button class="btn-primary">详情>></button></div>
-                                    </b-card>
-
-                                    <b-card title="Title" img-src="https://picsum.photos/300/300/?image=41" img-alt="Image" img-top>
-                                        <b-card-text>
-                                            This is a wider card with supporting text below as a natural lead-in to additional content.
-                                            This card has even longer content than the first to show that equal height action.
+                                            {{item.text}}
                                         </b-card-text>
                                         <div slot="footer" style="display:flex;justify-content: flex-end"><button class="btn-primary">详情>></button></div>
                                     </b-card>
@@ -137,14 +116,35 @@
                       caption:"First slide",
                       img_src:"https://picsum.photos/1024/480/?image=10",
                   },
-                  // {
-                  //     caption:"Second Slide",
-                  //     img_src:"https://picsum.photos/1024/480/?image=12",
-                  // },
-                  // {
-                  //     caption:"Third Slide",
-                  //     img_src:"https://picsum.photos/1024/480/?image=22",
-                  // }
+                  {
+                      caption:"Second Slide",
+                      img_src:"https://picsum.photos/1024/480/?image=12",
+                  },
+                  {
+                      caption:"Third Slide",
+                      img_src:"https://picsum.photos/1024/480/?image=22",
+                  }
+
+              ],
+              community_info:[
+                  {
+                      title:"Title",
+                      img_src:"https://picsum.photos/300/300/?image=41",
+                      text:"This is a wider card with supporting text below as a natural lead-in to additional content.\n" +
+                          "                                            This content is a little bit longer."
+                  },
+                  {
+                      title:"Title",
+                      img_src:"https://picsum.photos/300/300/?image=41",
+                      text:"This is a wider card with supporting text below as a natural lead-in to additional content.\n" +
+                          "                                            This content is a little bit longer."
+                  },
+                  {
+                      title:"Title",
+                      img_src:"https://picsum.photos/300/300/?image=41",
+                      text:"This is a wider card with supporting text below as a natural lead-in to additional content.\n" +
+                          "                                            This content is a little bit longer."
+                  },
 
               ],
               text_model:[
@@ -201,7 +201,7 @@
     }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
     @import "../../node_modules/bootstrap/scss/bootstrap";
     .carousel-inner{
         display:flex;
