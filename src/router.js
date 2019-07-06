@@ -5,6 +5,7 @@ import News from "./views/NewsPage.vue"
 import BBS from "./views/BBSPage.vue"
 import Community from "./views/Community.vue"
 import Info from "./views/InfoPage.vue"
+import Comments from "./views/NewsComments.vue"
 
 
 Vue.use(Router);
@@ -18,8 +19,13 @@ export default new Router({
     },
     {
       path: '/news',
-      name:'news',
+      name: 'news',
       component: News,
+    },
+    {
+      path:'/comments',
+      name:'comments',
+      component:Comments,
     },
     {
       path: '/info',
@@ -33,9 +39,10 @@ export default new Router({
     },
     {
       path:'/community',
-      name:'community',
+      name:'commmunity',
       component:Community,
     },
+
     {
       path: '/login',
       name: 'LoginPage',

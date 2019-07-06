@@ -10,7 +10,8 @@
                 <b-tab  class="news_dis_style" :active="!index" v-for="(item,index) in news_type_names" :title="item" :key="index">
                     <div>
                         <ul class="list-unstyled">
-                            <b-media tag="li" v-for="(item,index) in text_model" :key="index" class="my-3">
+                            <b-media tag="li" v-for="(item,index) in text_model" :key="index" class="my-3"
+                                     @click="jump()">
                                 <b-img slot="aside" blank blank-color="#abc" width="64" alt="placeholder" src="https://picsum.photos/300/150/?image=41"></b-img>
                                 <h5 class="mt-0 mb-1">{{item.title}}</h5>
                                 <p class="mb-0">
@@ -23,6 +24,7 @@
             </b-tabs>
         </div>
     </div>
+
 </template>
 
 <script>
@@ -80,7 +82,14 @@ export default {
               },
           ]
       }
+
   },
+    methods:{
+      jump(){
+          this.$router.push({path:'/comments'})
+
+      }
+    }
   // mounted() {
   //     this.$ajax
   //         .get('https://api.coindesk.com/v1/bpi/currentprice.json')
