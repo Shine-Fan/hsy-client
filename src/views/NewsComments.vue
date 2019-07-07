@@ -12,7 +12,7 @@
                    aria-describedby="basic-addon2"
                    v-model="CommentMsg">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" @click="add()">评论</button>
+                <button class="btn btn-outline-secondary" type="button" @click="add();GetTime();GetName()">评论</button>
             </div>
 
         </div>
@@ -25,8 +25,8 @@
                         :class="{active:true}">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1">姓名</h5>
-                            <small class="text-muted">发布时间</small>
+                            <h5 class="mb-1" id="on">用户名</h5>
+                            <small class="text-muted">{{currentdate}}</small>
                         </div>
                         <p class="mb-1">{{item}}</p>
 
@@ -39,25 +39,53 @@
 
 
 
-</template>
 
+</template>
 <script>
+    import store from '@/store'
     export default {
         name: "NewsComments",
-     data(){
-            return{
-                CommentMsg:'',
-                lists:[]
+        store,
+        data() {
+            return {
+                CommentMsg: '',
+                lists: [],
+                currentdate: '',
+                counter: 1,
+                key: 'key',
+                name:''
             }
-     },
-     methods:{
-            add(){
-                if(this.current===''){return}
+        },
+        methods: {
+            add() {
+                if (this.current === '') {
+                    return
+                }
                 this.lists.push(this.CommentMsg)
-                this.CommentMsg=''
+                this.key = this.key + this.counter
+                this.counter++
+                localStorage.setItem(this.key, this.CommentMsg)
+                this.CommentMsg = ''
+                this.key = 'key'
+            },
+            GetTime() {
+                var date = new Date();
+                var seperator1 = "-";
+                var year = date.getFullYear();
+                var month = date.getMonth() + 1;
+                var strDate = date.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+                this.currentdate = year + seperator1 + month + seperator1 + strDate;
+            },
+            GetName(){
 
+                }
             }
-     }
     }
 </script>
 

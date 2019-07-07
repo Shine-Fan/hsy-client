@@ -15,7 +15,7 @@
                 <input type="password" v-model="userPWD" class="form-control"/>
             </div>
             <div class="input-group col-md-6 justify-content-center">
-                <input type="submit" value="登陆" class="btn btn-primary btn-lg" v-on:click="LoginPost"/>
+                <input type="submit" value="登陆" class="btn btn-primary btn-lg" v-on:click="LoginPost" @click="bus()" id="emit"/>
             </div>
         </div>
         <br/>
@@ -26,7 +26,6 @@
 <script>
     /* eslint-disable no-console */
     // var defaultData={username:"zhangsan",password:"123456"};
-
     export default {
         name: 'LoginPage',
         data(){
@@ -60,6 +59,7 @@
                     });
             }
         }
+
     }
 </script>
 <style scoped>
