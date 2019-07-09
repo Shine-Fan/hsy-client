@@ -88,6 +88,8 @@ export default {
       jump(){
           this.$router.push({path:'/comments'})
 
+
+
       }
     }
   // mounted() {
