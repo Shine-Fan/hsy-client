@@ -4,12 +4,18 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
-  state: {
+  state:{
+    userName:"zhangsan"
+      },
+  mutations:{
+    transmit(){
+      this.state.userName
+    }
 
   },
-  mutations: {
-  },
-  actions: {
+  actions:{
 
   }
 })
+
+

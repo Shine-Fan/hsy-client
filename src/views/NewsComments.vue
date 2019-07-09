@@ -1,8 +1,13 @@
 <template>
     <div class="row" style="display:flex;justify-content: center">
-        <h3 class="mt-3 pb-3 mb-4 font-italic border-bottom">
+        <div class="News">
+            <h3 class="mt-3 pb-3 mb-4 font-italic border-bottom">
+                具体的新闻页面
+            </h3>>
+        </div>
+        <h5 class="mt-3 pb-3 mb-4 font-italic border-bottom">
             新闻评论
-        </h3>
+        </h5>
 
         <div class="input-group mb-3">
             <input type="text"
@@ -12,7 +17,7 @@
                    aria-describedby="basic-addon2"
                    v-model="CommentMsg">
             <div class="input-group-append">
-                <button class="btn btn-outline-secondary" type="button" @click="add();GetTime();GetName()">评论</button>
+                <button class="btn btn-outline-secondary" type="button" @click="add();GetTime()">评论</button>
             </div>
 
         </div>
@@ -25,7 +30,7 @@
                         :class="{active:true}">
                     <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" id="on">用户名</h5>
+                            <h5 class="mb-1" id="on">{{msg}}</h5>
                             <small class="text-muted">{{currentdate}}</small>
                         </div>
                         <p class="mb-1">{{item}}</p>
@@ -36,10 +41,6 @@
             </ul>
         </div>
     </div>
-
-
-
-
 </template>
 <script>
     import store from '@/store'
@@ -51,9 +52,9 @@
                 CommentMsg: '',
                 lists: [],
                 currentdate: '',
-                counter: 1,
+                counter: 0,
                 key: 'key',
-                name:''
+                msg: store.state.userName
             }
         },
         methods: {
@@ -64,7 +65,8 @@
                 this.lists.push(this.CommentMsg)
                 this.key = this.key + this.counter
                 this.counter++
-                localStorage.setItem(this.key, this.CommentMsg)
+                localStorage.setItem('counter',this.counter)
+                localStorage.setItem('key', this.CommentMsg)
                 this.CommentMsg = ''
                 this.key = 'key'
             },
@@ -82,9 +84,6 @@
                 }
                 this.currentdate = year + seperator1 + month + seperator1 + strDate;
             },
-            GetName(){
-
-                }
             }
     }
 </script>

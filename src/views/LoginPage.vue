@@ -6,7 +6,7 @@
                 <div class="input-group-prepend">
                     <label class="input-group-text">用户名</label>
                 </div>
-                <input type="text" v-model="userName" class="form-control"/>
+                <input type="text" v-model="userName" class="form-control" />
             </div>
             <div class="input-group col-md-8  mb-1">
                 <div class="input-group-prepend">
@@ -15,19 +15,21 @@
                 <input type="password" v-model="userPWD" class="form-control"/>
             </div>
             <div class="input-group col-md-6 justify-content-center">
-                <input type="submit" value="登陆" class="btn btn-primary btn-lg" v-on:click="LoginPost" @click="bus()" id="emit"/>
+                <input type="submit" value="登陆" class="btn btn-primary btn-lg" v-on:click="LoginPost;getName()" id="emit"/>
             </div>
         </div>
         <br/>
         <div>input,做参考用，实际版本应当删除<p>userName:{{ userName }}</p><p> password:{{ userPWD }}</p></div>
     </div>
 </template>
-
 <script>
+
     /* eslint-disable no-console */
     // var defaultData={username:"zhangsan",password:"123456"};
-    export default {
+    import store from '@/store'
+    export default ({
         name: 'LoginPage',
+        store,
         data(){
             return {
                 userName:"zhangsan",
@@ -57,10 +59,12 @@
                         console.log("catached");
                         console.log(error);
                     });
+            },
+        getName(){
+                store.commit('transmit')
             }
         }
-
-    }
+    })
 </script>
 <style scoped>
 
