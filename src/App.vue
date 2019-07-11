@@ -1,5 +1,8 @@
 <template>
   <div>
+<!--    <div class="wrap">-->
+<!--      <router-view v-if="isRouterAlive"></router-view>-->
+<!--    </div>-->
     <nav id="header" class="navbar navbar-expand-sm navbar-light bg-light">
       <span class="h2">HSY</span>
       <div class="collapse navbar-collapse" id="header-content" style="margin-left:2rem">
@@ -42,6 +45,12 @@
 <script>
   import sign from './components/Sign.vue'
   export default{
+    name:'app',
+    // provide(){
+    //   return{
+    //     reload:this.reload
+    //   }
+    // },
     components:{
       sign,
     },
@@ -49,9 +58,16 @@
       return{
         sign_flag : 0,//0:登录，1:注册
         sign_status: false,
+        // isRouterAlive:true
       }
     },
     methods:{
+      // reload(){
+      //   this.isRouterAlive=false;
+      //   this.$nextTick(function () {
+      //     this.isRouterAlive=true;
+      //   })
+      // },
       signin(){
         this.sign_flag = 0;
         this.sign_status = true;

@@ -74,6 +74,8 @@
     </div>
 </template>
 
+
+
 <script>
     export default {
         name: "Community.vue",
