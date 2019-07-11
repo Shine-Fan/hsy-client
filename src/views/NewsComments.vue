@@ -11,7 +11,7 @@
                 <button :class="{focus:true}" type="button">+关注</button>
             </p>
 
-            <p :class="{modificationtime:true}">2019.01.23 13:51  字数 3739 阅读 4147评论 57喜欢 58</p>
+            <p :class="{modificationtime:true}">2019.01.23 13:51  阅读 4147评论{{counter}} 喜欢 {{num}}</p>
             <div >
                 <p
                    :class="{active:true}"
@@ -28,14 +28,11 @@
             </div>
         </div>
         <div>
-            <button :class="{likenumber:true}" type="button" @click="count()">喜欢|{{num}}</button>
+            <button class=likenumber type="button" @click="count()">喜欢|{{num}}</button>
         </div>
 
         <div class="input-group mb-3" >
-            <a :class="avatar">
-                <img src="//upload.jianshu.io/users/upload_avatars/11046569/5360dd6b-626e-43d4-86eb-d0ea93639cda?imageMogr2/auto-orient/strip|imageView2/1/w/114/h/114/format/webp">
-            </a>
-            <textarea :class="{commentactive:true}"
+            <textarea class="commentactive"
                    placeholder="写下你的评论…"
                    aria-label="Recipient's username"
                    aria-describedby="basic-addon2"
@@ -45,6 +42,7 @@
             </div>
         </div>
         <div>
+            <span class="goodComments">精彩评论</span>
             <ul>
                 <li class="list-group"
                     :class="{active:true}"
@@ -122,32 +120,39 @@
                     return
                 }
                 else {
-                    comment[this.counter]=this.CommentMsg
-                    this.key = this.key + this.counter
-                    this.counter++
-                    localStorage.setItem('counter',this.counter)
-                    localStorage.setItem(this.key, this.CommentMsg)
-                    this.CommentMsg = ''
-                    this.key = 'key'
-                    // var Currentdate = new Date();
-                    // date[this.counter-1]= Currentdate.toDateString();
-                    // localStorage.setItem('currentdate'+this.counter, Currentdate.toDateString());
-                    var date = new Date();
-                    var seperator1 = "-";
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var strDate = date.getDate();
-                    if (month >= 1 && month <= 9) {
-                        month = "0" + month;
+                    if(this.CommentMsg!='')
+                    {
+                        comment[this.counter]=this.CommentMsg
+                        this.key = this.key + this.counter
+                        this.counter++
+                        localStorage.setItem('counter',this.counter)
+                        localStorage.setItem(this.key, this.CommentMsg)
+                        this.CommentMsg = ''
+                        this.key = 'key'
+                        // var Currentdate = new Date();
+                        // date[this.counter-1]= Currentdate.toDateString();
+                        // localStorage.setItem('currentdate'+this.counter, Currentdate.toDateString());
+                        var date = new Date();
+                        var seperator1 = "-";
+                        var year = date.getFullYear();
+                        var month = date.getMonth() + 1;
+                        var strDate = date.getDate();
+                        if (month >= 1 && month <= 9) {
+                            month = "0" + month;
+                        }
+                        if (strDate >= 0 && strDate <= 9) {
+                            strDate = "0" + strDate;
+                        }
+                        this.currentdate = year + seperator1 + month + seperator1 + strDate;
+                        date[this.counter-1]=this.currentdate
+                        localStorage.setItem('currentdate'+this.counter, this.currentdate);
+                        location.reload()
+                        // this.reload();
                     }
-                    if (strDate >= 0 && strDate <= 9) {
-                        strDate = "0" + strDate;
+                    else{
+                        alert("请输入你的评论！")
                     }
-                    this.currentdate = year + seperator1 + month + seperator1 + strDate;
-                    date[this.counter-1]=this.currentdate
-                    localStorage.setItem('currentdate'+this.counter, this.currentdate);
-                    location.reload()
-                    // this.reload();
+
                 }
 
             },
@@ -176,6 +181,10 @@
 </script>
 
 <style scoped>
+.row{
+    width: 80%;
+    margin: 0 auto;
+}
 li.active{
     width: 30cm;
     font-size: 8pt;
@@ -208,6 +217,11 @@ p.modificationtime{
     color: #969696
 }
 button.focus{
+    padding: 0 7px 0 5px;
+    font-size: 12px;
+    border-color: #42c02e;
+    font-weight: 400;
+    line-height: normal;
     border-radius: 40px;
     color: #fff;
     background-color: #42c02e;
@@ -218,9 +232,25 @@ button.focus{
     touch-action: manipulation;
     cursor: pointer;
     background-image: none;
-    border: 1px solid transparent;
     white-space: nowrap;
     user-select: none;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+.goodComments{
+    width: 80%;
+    margin: 0 auto;
+    padding-bottom: 20px;
+    font-size: 17px;
+    font-weight: 700;
+    border-bottom: 2px solid #f0f0f0;
+    border-bottom-width: 2px;
+    border-bottom-style: solid;
+    border-bottom-color: rgb(240, 240, 240);
+    box-sizing: border-box;
+
 }
     div.active{
         word-break: break-word!important;
@@ -247,26 +277,50 @@ button.focus{
         line-height: 1.7;
         font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
     }
-    button.likenumber{
-
-
-    }
-    a.avatar{
-        position: absolute;
-        left: -48px;
-        margin-right: 5px;
-        vertical-align: middle;
-        cursor: pointer;    width: 24px;
-        height: 24px;
-        display: block;
+    .likenumber{
+        position: relative;
+        padding: 18px 50px 18px 55px;
+        color: #EA6F5A;
         cursor: pointer;
-    }
-    textarea.commentactive{
+        text-decoration: none;
+        text-decoration-line: none;
+        text-decoration-style: initial;
+        text-decoration-color: initial;
+        background-color: transparent;
+        box-sizing: border-box;
+        font-size: 19px;
+        font-weight: 400;
+        text-align: center;
+        white-space: nowrap;
+        line-height: 1.42857;
+        user-select: none;
+        border: 1px solid #EA6F5A;
+        border-radius: 40px;
+}
+   .commentactive{
+        margin-top:30px;
         padding: 10px 15px;
         width: 100%;
         height: 80px;
         font-size: 13px;
         border: 1px solid #dcdcdc;
+       border-top-color: rgb(220, 220, 220);
+       border-top-style: solid;
+       border-top-width: 1px;
+       border-right-color: rgb(220, 220, 220);
+       border-right-style: solid;
+       border-right-width: 1px;
+       border-bottom-color: rgb(220, 220, 220);
+       border-bottom-style: solid;
+       border-bottom-width: 1px;
+       border-left-color: rgb(220, 220, 220);
+       border-left-style: solid;
+       border-left-width: 1px;
+       border-image-source: initial;
+       border-image-slice: initial;
+       border-image-width: initial;
+       border-image-outset: initial;
+       border-image-repeat: initial;
         border-radius: 4px;
         background-color: hsla(0,0%,71%,.1);
         resize: none;
@@ -277,7 +331,6 @@ button.focus{
         line-height: inherit;
         overflow: auto;
         color: inherit;
-        margin: 0;
         box-sizing: border-box;
         -webkit-writing-mode: horizontal-tb !important;
         text-rendering: auto;
@@ -296,4 +349,5 @@ button.focus{
         overflow-wrap: break-word;
         border-image: initial;
     }
+
 </style>
