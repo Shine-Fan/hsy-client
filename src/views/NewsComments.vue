@@ -8,7 +8,7 @@
                 </div>
             <p>
                 <span :class="{writeractive:true}">作者：路人甲</span>
-                <button :class="{focus:true}" type="button">+关注</button>
+                <b-link class="focus" >+关注</b-link>
             </p>
 
             <p :class="{modificationtime:true}">2019.01.23 13:51  阅读 4147评论{{counter}} 喜欢 {{num}}</p>
@@ -28,7 +28,7 @@
             </div>
         </div>
         <div>
-            <button class=likenumber type="button" @click="count()">喜欢|{{num}}</button>
+            <button class=likenumber type="button" @click="count()">喜欢 | {{num}}</button>
         </div>
 
         <div class="input-group mb-3" >
@@ -42,10 +42,9 @@
             </div>
         </div>
         <div>
-            <span class="goodComments">精彩评论</span>
-            <ul>
+            <p class="goodComments">精彩评论</p>
+            <ul class="commentlist">
                 <li class="list-group"
-                    :class="{active:true}"
                     v-for="item in lists"
                     :key="item">
                         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
@@ -59,11 +58,18 @@
                                 {{item.comment}}
                             </p>
                         </a>
-
-
                 </li>
-
             </ul>
+
+
+
+
+
+
+
+
+
+
         </div>
     </div>
 </template>
@@ -182,18 +188,22 @@
 
 <style scoped>
 .row{
-    width: 80%;
+    width: 1000px;
     margin: 0 auto;
 }
-li.active{
-    width: 30cm;
+.list-group{
+    width: 1000px;
     font-size: 8pt;
+    margin-left: -20px;
+}
+.commentlist{
+    margin-top:10px;
 }
 button.submitactive{
     background-color: #3db922;
     float: right;
     width: 78px;
-    margin: 10px 0;
+    margin: 10px 900px;
     padding: 8px 18px;
     font-size: 16px;
     border: none;
@@ -216,9 +226,9 @@ p.modificationtime{
     font-size: 12px;
     color: #969696
 }
-button.focus{
-    padding: 0 7px 0 5px;
-    font-size: 12px;
+.focus{
+    padding: 1px 7px 2px 5px;
+    font-size: 13px;
     border-color: #42c02e;
     font-weight: 400;
     line-height: normal;
@@ -226,7 +236,7 @@ button.focus{
     color: #fff;
     background-color: #42c02e;
     display: inline-block;
-    margin-bottom: 0;
+    margin-bottom: 3px;
     text-align: center;
     vertical-align: middle;
     touch-action: manipulation;
@@ -240,8 +250,8 @@ button.focus{
     -webkit-tap-highlight-color: transparent;
 }
 .goodComments{
-    width: 80%;
-    margin: 0 auto;
+    width: 1000px;
+    margin-left:20px;
     padding-bottom: 20px;
     font-size: 17px;
     font-weight: 700;
@@ -250,7 +260,6 @@ button.focus{
     border-bottom-style: solid;
     border-bottom-color: rgb(240, 240, 240);
     box-sizing: border-box;
-
 }
     div.active{
         word-break: break-word!important;
@@ -279,7 +288,7 @@ button.focus{
     }
     .likenumber{
         position: relative;
-        padding: 18px 50px 18px 55px;
+        padding: 9px 15px 12px 20px;
         color: #EA6F5A;
         cursor: pointer;
         text-decoration: none;
@@ -288,7 +297,7 @@ button.focus{
         text-decoration-color: initial;
         background-color: transparent;
         box-sizing: border-box;
-        font-size: 19px;
+        font-size: 15px;
         font-weight: 400;
         text-align: center;
         white-space: nowrap;
@@ -299,28 +308,12 @@ button.focus{
 }
    .commentactive{
         margin-top:30px;
+        margin-left: 9px;
         padding: 10px 15px;
-        width: 100%;
+        width: 1000px;
         height: 80px;
         font-size: 13px;
         border: 1px solid #dcdcdc;
-       border-top-color: rgb(220, 220, 220);
-       border-top-style: solid;
-       border-top-width: 1px;
-       border-right-color: rgb(220, 220, 220);
-       border-right-style: solid;
-       border-right-width: 1px;
-       border-bottom-color: rgb(220, 220, 220);
-       border-bottom-style: solid;
-       border-bottom-width: 1px;
-       border-left-color: rgb(220, 220, 220);
-       border-left-style: solid;
-       border-left-width: 1px;
-       border-image-source: initial;
-       border-image-slice: initial;
-       border-image-width: initial;
-       border-image-outset: initial;
-       border-image-repeat: initial;
         border-radius: 4px;
         background-color: hsla(0,0%,71%,.1);
         resize: none;
@@ -347,7 +340,8 @@ button.focus{
         cursor: text;
         white-space: pre-wrap;
         overflow-wrap: break-word;
-        border-image: initial;
     }
+
+
 
 </style>
