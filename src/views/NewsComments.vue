@@ -23,8 +23,6 @@
                     第三，香港回归以来，一国两制港人治港高度自治的方针得到切实贯彻和落实，香港居民享有的各项权利和自由依法得到充分保障，事实有目共睹。保持香港的繁荣和稳定不仅符合中国的利益，也符合世界各国的利益。
                     此外，针对有记者问及何韵诗在发言中要求联合国人权理事会将中国除名，耿爽表示，这是痴心妄想，不自量力。
                 </p>
-
-
             </div>
         </div>
         <div>
@@ -45,16 +43,17 @@
             <p class="goodComments">精彩评论({{counter}})</p>
             <ul class="commentlist">
                 <li class="list-group"
-                    v-for="(item,index) in commentList"
-                    :key="item"
-                    :index="index">
+                    v-for="item in commentList"
+                    :key="item">
                     <comment
                             :date=item.date
                             :comment = item.comment
                             :msg=msg></comment>
+
                 </li>
             </ul>
         </div>
+
     </div>
 </template>
 
