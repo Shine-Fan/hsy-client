@@ -42,42 +42,31 @@
             </div>
         </div>
         <div>
-            <p class="goodComments">精彩评论</p>
+            <p class="goodComments">精彩评论({{counter}})</p>
             <ul class="commentlist">
                 <li class="list-group"
-                    v-for="item in lists"
-                    :key="item">
-                        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
-                            <div class="d-flex w-100 justify-content-between">
-                                <h6 class="mb-1" id="on">{{msg}}</h6>
-                                <small class="text-muted">
-                                    {{item.date}}
-                                </small>
-                            </div>
-                            <p class="mb-1">
-                                {{item.comment}}
-                            </p>
-                        </a>
+                    v-for="(item,index) in commentList"
+                    :key="item"
+                    :index="index">
+                    <comment
+                            :date=item.date
+                            :comment = item.comment
+                            :msg=msg></comment>
                 </li>
             </ul>
-
-
-
-
-
-
-
-
-
-
         </div>
     </div>
 </template>
+
 <script>
     import store from '@/store'
-    let comment=[];
-    let date=[];
-    let lists=[];
+    import comment from '@/components/comment.vue'
+
+    // let comment=[];
+    // let lists=[];
+    // let reply=[];
+    // let date=[];
+    var commentList=[];
     let counters=0;
     let num=0;
     function init() {
@@ -91,14 +80,22 @@
         if (localStorage.hasOwnProperty("counter")) {
             counters = localStorage.getItem("counter");
             for (let i = 0; i < counters; i++) {
-                comment[i] = localStorage.getItem("key" + i);
-                date[i]=localStorage.getItem("currentdate" + (i+1));
-                lists[i]={
-                    date:date[i],
-                    comment:comment[i]
+                var temp= {
+                        comment:[],
+                        date:[],
+                        name:[],
                 }
+                temp.comment = localStorage.getItem("key" + i);
+                temp.date=localStorage.getItem("currentdate" + (i+1));
+                temp.name=store.state.userName,
+                commentList.push(temp);
+
+                // lists[i]={
+                //     date:date[i],
+                //     comment:comment[i],
+                // }
             }
-            console.log(lists)
+            console.log(commentList);
         }
         else{
             counters=0
@@ -108,33 +105,35 @@
     export default {
 
         name: "NewsComments",
-        // inject:['reload'],
         store,
         data() {
             return {
                 CommentMsg: '',
-                lists:lists,
+                commentList:commentList,
                 counter: counters,
                 key: 'key',
                 msg: store.state.userName,
-                num:num
+                num:num,
+                // ReplyMsg:'',
+                // Replylist:[],
+
             }
         },
         methods: {
             add() {
                 if (this.current === '') {
-                    return
+                    return;
                 }
                 else {
                     if(this.CommentMsg!='')
                     {
-                        comment[this.counter]=this.CommentMsg
-                        this.key = this.key + this.counter
-                        this.counter++
-                        localStorage.setItem('counter',this.counter)
-                        localStorage.setItem(this.key, this.CommentMsg)
-                        this.CommentMsg = ''
-                        this.key = 'key'
+                       // commentList[this.counter].comment=this.CommentMsg;
+
+                        this.key = this.key + this.counter;
+                        this.counter++;
+                        localStorage.setItem('counter',this.counter);
+                        localStorage.setItem(this.key, this.CommentMsg);
+
                         // var Currentdate = new Date();
                         // date[this.counter-1]= Currentdate.toDateString();
                         // localStorage.setItem('currentdate'+this.counter, Currentdate.toDateString());
@@ -150,8 +149,17 @@
                             strDate = "0" + strDate;
                         }
                         this.currentdate = year + seperator1 + month + seperator1 + strDate;
-                        date[this.counter-1]=this.currentdate
+
+                        var tem=[];
+                       tem={
+                            CommentMsg:this.CommentMsg,
+                            currentdate:this.currentdate
+                        }
+                        // commentList[this.counter-1].date=this.currentdate
+                        commentList.push(tem);
                         localStorage.setItem('currentdate'+this.counter, this.currentdate);
+                        this.CommentMsg = '';
+                        this.key = 'key';
                         location.reload()
                         // this.reload();
                     }
@@ -162,32 +170,23 @@
                 }
 
             },
-            // GetTime() {
-            //     var date = new Date();
-            //     var seperator1 = "-";
-            //     var year = date.getFullYear();
-            //     var month = date.getMonth() + 1;
-            //     var strDate = date.getDate();
-            //     if (month >= 1 && month <= 9) {
-            //         month = "0" + month;
-            //     }
-            //     if (strDate >= 0 && strDate <= 9) {
-            //         strDate = "0" + strDate;
-            //     }
-            //     this.currentdate = year + seperator1 + month + seperator1 + strDate;
-            //     date[this.counter-1]=this.currentdate
-            //     localStorage.setItem('currentdate'+this.counter, this.currentdate);
-            // },
             count(){
                 this.num++;
                 localStorage.setItem('num',this.num);
-            }}
+            },
+
+
+        },
+components:{
+            "comment":comment,
+
+}
     }
 
 </script>
 
 <style scoped>
-.row{
+    .row{
     width: 1000px;
     margin: 0 auto;
 }
