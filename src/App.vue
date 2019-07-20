@@ -43,7 +43,7 @@
 </template>
 
 <script>
-  import sign from './components/Sign.vue'
+  import sign from './components/Sign2.vue'
   export default{
     name:'app',
     // provide(){

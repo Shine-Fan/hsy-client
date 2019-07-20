@@ -5,13 +5,13 @@
                  style="text-align: center"
                 :class="{active:true}">
                 何韵诗要联合国人权理事会将中国除名 外交部回应
-                </div>
+            </div>
             <p>
                 <span :class="{writeractive:true}">作者：路人甲</span>
                 <b-link class="focus" >+关注</b-link>
             </p>
 
-            <p :class="{modificationtime:true}">2019.01.23 13:51  阅读 4147评论{{counter}} 喜欢 {{num}}</p>
+            <p :class="{modificationtime:true}">2019.01.23 13:51  阅读 4147评论{{counter}}喜欢 {{num}}</p>
             <div >
                 <p
                    :class="{active:true}"
@@ -40,82 +40,152 @@
             </div>
         </div>
         <div>
-            <p class="goodComments">精彩评论({{counter}})</p>
-            <ul class="commentlist">
+            <p class="goodComments">精彩评论({{commentnumber}})</p>
+            <ul class="commentlist" >
                 <li class="list-group"
-                    v-for="item in commentList"
-                    :key="item">
-                    <comment
-                            :date=item.date
-                            :comment = item.comment
-                            :msg=msg></comment>
-
+                    v-for="(first,index) in comment"
+                    :key="index">
+                    <commentComponents :date=first.comment.time
+                             :commentmsg = first.comment.content
+                             :msg=first.comment.authorId>
+                    </commentComponents>
+                            <ul class="replylist">
+                                <li class="list-group"
+                                    v-for="(firstreply,replyindex) in first.childs"
+                                    :key="replyindex" :id="first.comment.Id">
+                                    <commentComponents
+                                            :date=firstreply.comment.time
+                                            :commentmsg = firstreply.comment.content
+                                            :msg=firstreply.comment.authorId
+                                            :Id=firstreply.comment.Id
+                                            :authorId=firstreply.comment.authorId>
+                                    </commentComponents>
+                                </li>
+                            </ul>
                 </li>
             </ul>
         </div>
-
     </div>
 </template>
 
 <script>
     import store from '@/store'
-    import comment from '@/components/comment.vue'
+    import commentComponents from '@/components/commentComponents.vue'
 
-    // let comment=[];
-    // let lists=[];
-    // let reply=[];
-    // let date=[];
+    var comment=[
+        {
+            comment: {
+                Id: 1,
+                postId: 200,
+                authorId: 300,
+                time: '2019-07-17',
+                content: '这应该是第一条评论',
+                pid: '',
+                replyUserId: ''
+                },
+            childs:
+                [{comment:
+                        {
+                            Id: 1,
+                            postId: 200,
+                            authorId: 500,
+                            time: '2019-07-18',
+                            content: '第一条评论的第一个回复',
+                            pid: 400,
+                            replyUserId: '小明'//小明的authorid是300
+                        }},
+                {comment:{
+                            Id: 1,
+                            postId: 200,
+                            authorId: 5000,
+                            time: '2019-07-18',
+                            content: '第一个评论的第二个回复',
+                            pid: 400,
+                            replyUserId: '小明'//小明的authorid是300
+                        }},
+                {comment:{
+                            Id: 100,
+                            postId: 200,
+                            authorId: 50000,
+                            time: '2019-07-18',
+                            content: '第一个评论的第三个回复',
+                            pid: 400,
+                            replyUserId: '小明'//小明的authorid是300
+                        }},]
+        },
+
+    {
+        comment: {
+                Id: 2,
+                postId: 200,
+                authorId: 300,
+                time: '2019-07-17',
+                content: '这应该是第二条评论',
+                pid: '',
+                replyUserId: ''
+        },
+        childs:
+            [{comment:
+        {
+            Id: 2,
+            postId: 200,
+            authorId: 500,
+            time: '2019-07-18',
+            content: '第二条评论的第一个回复',
+            pid: 400,
+            replyUserId: '小明'//小明的authorid是300
+        }},
+       { comment:{
+                Id: 2,
+                postId: 200,
+                authorId: 5000,
+                time: '2019-07-18',
+                content: '第二个评论的第二个回复',
+                pid: 400,
+                replyUserId: '小明'//小明的authorid是300
+        }},
+        {comment:{
+                Id: 2,
+                postId: 200,
+                authorId: 50000,
+                time: '2019-07-18',
+                content: '第二个评论的第三个回复',
+                pid: 400,
+                replyUserId: '小明'//小明的authorid是300
+        }},]
+    },
+
+    ]
     var commentList=[];
     let counters=0;
     let num=0;
-    function init() {
-        if(localStorage.hasOwnProperty("num"))
-        {
-            num=localStorage.getItem("num");
-        }
-        else{
-            num=0;
-        }
-        if (localStorage.hasOwnProperty("counter")) {
-            counters = localStorage.getItem("counter");
-            for (let i = 0; i < counters; i++) {
-                var temp= {
-                        comment:[],
-                        date:[],
-                        name:[],
-                }
-                temp.comment = localStorage.getItem("key" + i);
-                temp.date=localStorage.getItem("currentdate" + (i+1));
-                temp.name=store.state.userName,
-                commentList.push(temp);
-
-                // lists[i]={
-                //     date:date[i],
-                //     comment:comment[i],
-                // }
-            }
-            console.log(commentList);
-        }
-        else{
-            counters=0
-        }
-    }
-    init();
     export default {
-
         name: "NewsComments",
         store,
+        computed:{
+            // commentlist: function () {
+            //     return this.firstcomment.filter(function (obj) {
+            //         return obj.pid ==='';
+            //     })
+            // },
+
+            commentnumber:function () {
+                return Number(this.counter)+Number(this.comment.length)
+            }
+        },
         data() {
             return {
                 CommentMsg: '',
                 commentList:commentList,
                 counter: counters,
                 key: 'key',
+                replykey: 'replykey',
                 msg: store.state.userName,
                 num:num,
-                // ReplyMsg:'',
-                // Replylist:[],
-
+                replycomment:replycomment,
+                inputDisplay:false,
+                replyCounters:replycomment.length,
+                comment:comment,
             }
         },
         methods: {
@@ -123,19 +193,8 @@
                 if (this.current === '') {
                     return;
                 }
-                else {
                     if(this.CommentMsg!='')
                     {
-                       // commentList[this.counter].comment=this.CommentMsg;
-
-                        this.key = this.key + this.counter;
-                        this.counter++;
-                        localStorage.setItem('counter',this.counter);
-                        localStorage.setItem(this.key, this.CommentMsg);
-
-                        // var Currentdate = new Date();
-                        // date[this.counter-1]= Currentdate.toDateString();
-                        // localStorage.setItem('currentdate'+this.counter, Currentdate.toDateString());
                         var date = new Date();
                         var seperator1 = "-";
                         var year = date.getFullYear();
@@ -148,117 +207,111 @@
                             strDate = "0" + strDate;
                         }
                         this.currentdate = year + seperator1 + month + seperator1 + strDate;
-
                         var tem=[];
                        tem={
-                            CommentMsg:this.CommentMsg,
-                            currentdate:this.currentdate
+                           comment:
+                                   { content:this.CommentMsg,
+                                    time:this.currentdate,
+                                    authorId:987654321,},
+                           childs:[]
                         }
-                        // commentList[this.counter-1].date=this.currentdate
-                        commentList.push(tem);
-                        localStorage.setItem('currentdate'+this.counter, this.currentdate);
+                        comment.push(tem);
                         this.CommentMsg = '';
-                        this.key = 'key';
-                        location.reload()
+                        // location.reload()
                         // this.reload();
                     }
                     else{
                         alert("请输入你的评论！")
                     }
 
-                }
 
             },
             count(){
                 this.num++;
                 localStorage.setItem('num',this.num);
             },
-
-
         },
-components:{
-            "comment":comment,
-
+        components:{
+                "commentComponents":commentComponents,
+        }
 }
-    }
-
 </script>
 
 <style scoped>
     .row{
     width: 1000px;
     margin: 0 auto;
-}
-.list-group{
-    width: 1000px;
-    font-size: 8pt;
-    margin-left: -20px;
-}
-.commentlist{
-    margin-top:10px;
-}
-button.submitactive{
-    background-color: #3db922;
-    float: right;
-    width: 78px;
-    margin: 10px 900px;
-    padding: 8px 18px;
-    font-size: 16px;
-    border: none;
-    border-radius: 20px;
-    color: #fff!important;
-    cursor: pointer;
-    outline: none;
-    display: block;
-}
-span.writeractive{
-    cursor: pointer;
-    color: #333;
-    text-decoration: none;
-    background-color: transparent;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-p.modificationtime{
-    margin-top: 5px;
-    font-size: 12px;
-    color: #969696
-}
-.focus{
-    padding: 1px 7px 2px 5px;
-    font-size: 13px;
-    border-color: #42c02e;
-    font-weight: 400;
-    line-height: normal;
-    border-radius: 40px;
-    color: #fff;
-    background-color: #42c02e;
-    display: inline-block;
-    margin-bottom: 3px;
-    text-align: center;
-    vertical-align: middle;
-    touch-action: manipulation;
-    cursor: pointer;
-    background-image: none;
-    white-space: nowrap;
-    user-select: none;
-    text-decoration: none;
-    box-sizing: border-box;
-    font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
-    -webkit-tap-highlight-color: transparent;
-}
-.goodComments{
-    width: 1000px;
-    margin-left:20px;
-    padding-bottom: 20px;
-    font-size: 17px;
-    font-weight: 700;
-    border-bottom: 2px solid #f0f0f0;
-    border-bottom-width: 2px;
-    border-bottom-style: solid;
-    border-bottom-color: rgb(240, 240, 240);
-    box-sizing: border-box;
-}
+    }
+    .list-group{
+        width: 1000px;
+        font-size: 8pt;
+        margin-left: -20px;
+    }
+    .commentlist{
+        margin-top:10px;
+    }
+    button.submitactive{
+        background-color: #3db922;
+        float: right;
+        width: 78px;
+        margin: 10px 900px;
+        padding: 8px 18px;
+        font-size: 16px;
+        border: none;
+        border-radius: 20px;
+        color: #fff!important;
+        cursor: pointer;
+        outline: none;
+        display: block;
+    }
+    span.writeractive{
+        cursor: pointer;
+        color: #333;
+        text-decoration: none;
+        background-color: transparent;
+        box-sizing: border-box;
+        font-size: 16px;
+    }
+    p.modificationtime{
+        margin-top: 5px;
+        font-size: 12px;
+        color: #969696
+    }
+    .focus{
+        padding: 1px 7px 2px 5px;
+        font-size: 13px;
+        border-color: #42c02e;
+        font-weight: 400;
+        line-height: normal;
+        border-radius: 40px;
+        color: #fff;
+        background-color: #42c02e;
+        display: inline-block;
+        margin-bottom: 3px;
+        text-align: center;
+        vertical-align: middle;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        white-space: nowrap;
+        user-select: none;
+        text-decoration: none;
+        box-sizing: border-box;
+        font-family: -apple-system,SF UI Text,Arial,PingFang SC,Hiragino Sans GB,Microsoft YaHei,WenQuanYi Micro Hei,sans-serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .goodComments{
+        width: 1000px;
+        margin-left:20px;
+        padding-bottom: 20px;
+        font-size: 17px;
+        font-weight: 700;
+        border-bottom: 2px solid #f0f0f0;
+        border-bottom-width: 2px;
+        border-bottom-style: solid;
+        border-bottom-color: rgb(240, 240, 240);
+        box-sizing: border-box;
+    }
     div.active{
         word-break: break-word!important;
         word-break: break-all;
@@ -303,7 +356,7 @@ p.modificationtime{
         user-select: none;
         border: 1px solid #EA6F5A;
         border-radius: 40px;
-}
+    }
    .commentactive{
         margin-top:30px;
         margin-left: 9px;
@@ -339,7 +392,4 @@ p.modificationtime{
         white-space: pre-wrap;
         overflow-wrap: break-word;
     }
-
-
-
 </style>
