@@ -47,7 +47,9 @@
                     :key="index">
                     <commentComponents :date=first.comment.time
                              :commentmsg = first.comment.content
-                             :msg=first.comment.authorId>
+                             :msg=first.comment.authorId
+                             :pid="first.comment.pid"
+                             :authorId=first.comment.authorId>
                     </commentComponents>
                             <ul class="replylist">
                                 <li class="list-group"
@@ -57,8 +59,9 @@
                                             :date=firstreply.comment.time
                                             :commentmsg = firstreply.comment.content
                                             :msg=firstreply.comment.authorId
+                                            :authorId=firstreply.comment.authorId
                                             :Id=firstreply.comment.Id
-                                            :authorId=firstreply.comment.authorId>
+                                            :pid=firstreply.comment.pid>
                                     </commentComponents>
                                 </li>
                             </ul>
@@ -91,7 +94,7 @@
                             authorId: 500,
                             time: '2019-07-18',
                             content: '第一条评论的第一个回复',
-                            pid: 400,
+                            pid: 300,
                             replyUserId: '小明'//小明的authorid是300
                         }},
                 {comment:{
@@ -100,7 +103,7 @@
                             authorId: 5000,
                             time: '2019-07-18',
                             content: '第一个评论的第二个回复',
-                            pid: 400,
+                            pid: 300,
                             replyUserId: '小明'//小明的authorid是300
                         }},
                 {comment:{
@@ -109,7 +112,7 @@
                             authorId: 50000,
                             time: '2019-07-18',
                             content: '第一个评论的第三个回复',
-                            pid: 400,
+                            pid: 300,
                             replyUserId: '小明'//小明的authorid是300
                         }},]
         },
@@ -118,7 +121,7 @@
         comment: {
                 Id: 2,
                 postId: 200,
-                authorId: 300,
+                authorId: 400,
                 time: '2019-07-17',
                 content: '这应该是第二条评论',
                 pid: '',
@@ -182,9 +185,9 @@
                 replykey: 'replykey',
                 msg: store.state.userName,
                 num:num,
-                replycomment:replycomment,
+                // replycomment:replycomment,
                 inputDisplay:false,
-                replyCounters:replycomment.length,
+                // replyCounters:replycomment.length,
                 comment:comment,
             }
         },
@@ -245,7 +248,7 @@
     .list-group{
         width: 1000px;
         font-size: 8pt;
-        margin-left: -20px;
+        margin-left: -5px;
     }
     .commentlist{
         margin-top:10px;

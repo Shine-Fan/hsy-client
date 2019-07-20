@@ -2,7 +2,12 @@
     <div>
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h6 class="mb-1" id="on">{{msg}}</h6>
+                <h6 class="mb-1" v-if="pid">
+                    {{msg}}@{{pid}}
+                </h6>
+                <h6 class="mb-1" v-if="!pid">
+                    {{msg}}
+                </h6>
                 <small class="text-muted">
                     {{date}}
                 </small>
@@ -17,7 +22,7 @@
                     <div class="input-group mb-3" >
                         <div class="input-group-append">
                             <textarea class="commentactive"
-                                      placeholder="说点什么吧…"
+                                      :placeholder="replyauthorId"
                                       aria-label="Recipient's username"
                                       aria-describedby="basic-addon2"
                                       v-model="ReplyMsg">
@@ -38,6 +43,7 @@
     let replyCounters=0;
     let replyNum=0;
     let msg=store.state.userName;
+    let isreply=false;
     export default {
         components:{
             "commentComponents":commentComponents,
@@ -49,6 +55,8 @@
             msg:String,
             date:String,
             commentmsg:String,
+            replyUserId:String,
+            pid:Number,
         },
         data(){
             return{
@@ -123,13 +131,13 @@
                                 time:this.replycurrentdate,
                                 authorId:987654321,},
                     }
-                    // var item=document.createElement("commentComponents",{
-                    //                                                         date:this.replycurrentdate,
-                    //                                                         commentmsg:this.content,
-                    //                                                         msg:987654321,
-                    //                                                         Id:this.Id,
-                    //                                                         authorId:987654321});
-                    var item=document.createElement("div")
+                    var item=document.createElement("commentComponents",{
+                                                                            date:this.replycurrentdate,
+                                                                            commentmsg:this.content,
+                                                                            msg:987654321,
+                                                                            Id:this.Id,
+                                                                            authorId:987654321});
+                    // var item=document.createElement("div")
                     // item.date=this.replycurrentdate;
                     // item.commentmsg=this.content;
                     // item.msg="987654321";
@@ -137,9 +145,8 @@
                     // item.authorId=987654321;
                     // item.append("123");
                     // console.log(item);
-                    var pitem=document.getElementById(this.Id);
-                    // pitem.appendChild(item);
-                    console.log(this.Id);
+                   document.getElementById(this.Id).appendChild(item);
+                    // console.log(this.Id);
                 }
                 else{
                     alert("请输入你的评论！")
@@ -147,6 +154,11 @@
                 this.inputDisplay=!this.inputDisplay;
             }
         },
+        computed:{
+            replyauthorId:function () {
+                return "回复"+this.authorId+":";
+            }
+        }
     }
 </script>
 <style scoped>
