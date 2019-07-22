@@ -28,22 +28,21 @@
                                       v-model="ReplyMsg">
                             </textarea>
                         </div>
-                        <span class="replySubmit" @click="addreply()">发表</span>
+                        <span class="replybtn" @click="addreply()">发表</span>
                     </div>
                 </div>
-                <button :class="{submitactive:true}" type="button" v-if="!inputDisplay" @click="reply()">回复</button>
+                <button class="replybtn" type="button" v-if="!inputDisplay" @click="reply()">回复</button>
             </div>
         </div>
     </div>
 </template>
 <script>
-    import store from '@/store'
     import commentComponents from '@/components/commentComponents.vue'
-    let replyList=[];
-    let replyCounters=0;
-    let replyNum=0;
-    let msg=store.state.userName;
-    let isreply=false;
+    // let replyList=[];
+    // let replyCounters=0;
+    // let replyNum=0;
+    // let msg=store.state.userName;
+    // let isreply=false;
     export default {
         components:{
             "commentComponents":commentComponents,
@@ -57,6 +56,9 @@
             commentmsg:String,
             replyUserId:String,
             pid:Number,
+            content:String,
+            postId:Number,
+            index:Number,
         },
         data(){
             return{
@@ -124,29 +126,25 @@
                         strDate = "0" + strDate;
                     }
                     this.replycurrentdate = year + seperator1 + month + seperator1 + strDate;
-                    var tem=[];
-                    tem={
-                        comment:
-                            {   content:this.ReplyMsg,
-                                time:this.replycurrentdate,
-                                authorId:987654321,},
-                    }
-                    var item=document.createElement("commentComponents",{
-                                                                            date:this.replycurrentdate,
-                                                                            commentmsg:this.content,
-                                                                            msg:987654321,
-                                                                            Id:this.Id,
-                                                                            authorId:987654321});
-                    // var item=document.createElement("div")
-                    // item.date=this.replycurrentdate;
-                    // item.commentmsg=this.content;
-                    // item.msg="987654321";
-                    // item.Id=this.Id;
-                    // item.authorId=987654321;
-                    // item.append("123");
-                    // console.log(item);
-                   document.getElementById(this.Id).appendChild(item);
-                    // console.log(this.Id);
+                    // var tem=[];
+                    // tem={
+                    //     comment:
+                    //         {   content:this.ReplyMsg,
+                    //             time:this.replycurrentdate,
+                    //             authorId:987654321,},
+                    // }
+                    var message=[{comment:
+                            {
+                                Id: this.Id,
+                                postId: this.postId,
+                                authorId: 500,
+                                time: this.replycurrentdate,
+                                content:this.ReplyMsg,
+                                pid: this.authorId,
+                                replyUserId: '小明',//小明的authorid是300
+                            }},{data:this.index}]
+                    this.$emit("replymessage",message)
+
                 }
                 else{
                     alert("请输入你的评论！")
@@ -162,19 +160,43 @@
     }
 </script>
 <style scoped>
-    button.submitactive{
-        background-color: #3db922;
-        float: right;
-        width: 78px;
-        margin: 10px 900px;
-        padding: 8px 18px;
-        font-size: 16px;
-        border: none;
-        border-radius: 20px;
-        color: #fff!important;
-        cursor: pointer;
-        outline: none;
+    .replybtn {
         display: block;
+        -webkit-box-sizing: content-box;
+        -moz-box-sizing: content-box;
+        box-sizing: content-box;
+        float: right;
+        z-index: auto;
+        width: 25px;
+        height: 10px;
+        position: relative;
+        cursor: pointer;
+        opacity: 1;
+        left: 934px;
+        margin-top: 10px;
+        margin-left: -10px;
+        padding: 5px 20px 10px;
+        overflow: visible;
+        border: 1px solid #6699CC;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        font: normal 12px/normal Arial, Helvetica, sans-serif;
+        color: rgba(255,255,255,0.9);
+        -o-text-overflow: clip;
+        text-overflow: clip;
+        background: #6699CC;
+        -webkit-box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+        box-shadow: 2px 2px 2px 0 rgba(0,0,0,0.2) ;
+        text-shadow: -1px -1px 0 #6699CC ;
+        -webkit-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -moz-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -o-transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        transition: all 300ms cubic-bezier(0.42, 0, 0.58, 1);
+        -webkit-transform: none;
+        transform: none;
+        -webkit-transform-origin: 50% 50% 0;
+        transform-origin: 50% 50% 0;
+        border-radius: 28px;
     }
     .commentactive{
         margin-top:30px;
@@ -211,26 +233,5 @@
         white-space: pre-wrap;
         overflow-wrap: break-word;
     }
-    .replySubmit{
-        color: #fff;
-        width: 70px;
-        padding: 0;
-        display: inline-block;
-        text-align: center;
-        border: none;
-        position: relative;
-        height: 28px;
-        line-height: 28px;
-        font-size: 14px;
-        border-radius: 2px;
-        vertical-align: middle;
-        text-decoration: none;
-        cursor: pointer;
-        background-color: #1995e4;
-        margin: 0;
-        list-style: none;
-        font-family: punctuation,"PingFangSC-Regular","Microsoft Yahei","sans-serif";
-        -webkit-font-smoothing: subpixel-antialiased;
 
-    }
 </style>

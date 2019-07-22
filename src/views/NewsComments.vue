@@ -4,29 +4,24 @@
             <div
                  style="text-align: center"
                 :class="{active:true}">
-                何韵诗要联合国人权理事会将中国除名 外交部回应
+                {{title}}
             </div>
             <p>
-                <span :class="{writeractive:true}">作者：路人甲</span>
-                <b-link class="focus" >+关注</b-link>
+                <span :class="{writeractive:true}">{{author}}</span>
+                <b-link class="focus">+关注</b-link>
             </p>
 
-            <p :class="{modificationtime:true}">2019.01.23 13:51  阅读 4147评论{{counter}}喜欢 {{num}}</p>
+            <p :class="{modificationtime:true}">{{creatTime}} &emsp;评论 {{commentnumber}}       &emsp;   喜欢 {{num}}</p>
             <div >
                 <p
                    :class="{active:true}"
                    style="text-indent:2em;">
-                      在9日中国外交部例行记者会上，有记者提问称，香港艺人何韵诗昨日在联合国人权理事会上就香港特区政府修改《逃犯条例》发表言论，但被中方代表打断。北京是否不允许香港民间人士在国际场合发表不利于大陆立场的言论？
-                    对此，中国外交部发言人耿爽表示：
-                    第一，香港是中国的特别行政区，香港事务纯属中国内政，任何国家和组织无权干预。
-                    第二，有关的非政府组织违反了联合国宪章和联合国人权理事会的相关规定，在发言中挑战一个中国原则，干涉中国内政和主权，污蔑中国的人权状况，中方对此表示坚决反对，并给予强烈谴责。
-                    第三，香港回归以来，一国两制港人治港高度自治的方针得到切实贯彻和落实，香港居民享有的各项权利和自由依法得到充分保障，事实有目共睹。保持香港的繁荣和稳定不仅符合中国的利益，也符合世界各国的利益。
-                    此外，针对有记者问及何韵诗在发言中要求联合国人权理事会将中国除名，耿爽表示，这是痴心妄想，不自量力。
+                  {{newsContent}}
                 </p>
             </div>
         </div>
         <div>
-            <button class=likenumber type="button" @click="count()">喜欢 | {{num}}</button>
+            <button class=likenumber type="button" style="outline: none" @click="count()">喜欢 | {{num}}</button>
         </div>
 
         <div class="input-group mb-3" >
@@ -35,24 +30,31 @@
                    aria-label="Recipient's username"
                    aria-describedby="basic-addon2"
                       v-model="CommentMsg"></textarea>
-            <div class="input-group-append">
-                <button :class="{submitactive:true}" type="button" @click="add()">评论</button>
+            <div class="input-group-append" >
+                <button :class="{submitactive:true}" type="button" @click="add()" >评论</button>
             </div>
         </div>
-        <div>
-            <p class="goodComments">精彩评论({{commentnumber}})</p>
-            <ul class="commentlist" >
-                <li class="list-group"
+        <div style="float: right">
+            <p class="goodComments" >精彩评论({{commentnumber}})</p>
+            <ul class="commentlist" style="list-style: none;width: 1080px;margin-left: -60px" >
+                <li
                     v-for="(first,index) in comment"
-                    :key="index">
+                    :key="index"
+                    id="index">
                     <commentComponents :date=first.comment.time
                              :commentmsg = first.comment.content
                              :msg=first.comment.authorId
                              :pid="first.comment.pid"
-                             :authorId=first.comment.authorId>
+                             :authorId=first.comment.authorId
+                             :postId=first.comment.postId
+                             :Id=first.comment.Id
+                             :replyUserId=first.comment.replyUserId
+                             :index="index"
+                             @replymessage="replymessage"
+                                       class="huifu">
                     </commentComponents>
-                            <ul class="replylist">
-                                <li class="list-group"
+                            <ul class="replylist" style="list-style: none">
+                                <li
                                     v-for="(firstreply,replyindex) in first.childs"
                                     :key="replyindex" :id="first.comment.Id">
                                     <commentComponents
@@ -61,7 +63,10 @@
                                             :msg=firstreply.comment.authorId
                                             :authorId=firstreply.comment.authorId
                                             :Id=firstreply.comment.Id
-                                            :pid=firstreply.comment.pid>
+                                            :pid=firstreply.comment.pid
+                                            :postId=firstreply.comment.postId
+                                            @replymessage="replymessage"
+                                            :index="index">
                                     </commentComponents>
                                 </li>
                             </ul>
@@ -166,18 +171,24 @@
         name: "NewsComments",
         store,
         computed:{
-            // commentlist: function () {
-            //     return this.firstcomment.filter(function (obj) {
-            //         return obj.pid ==='';
-            //     })
-            // },
-
             commentnumber:function () {
                 return Number(this.counter)+Number(this.comment.length)
             }
         },
         data() {
             return {
+                title:"何韵诗要联合国人权理事会将中国除名 外交部回应",//新闻名称
+                id:11112222,//新闻表ID
+                newsContent:"在9日中国外交部例行记者会上，有记者提问称，香港艺人何韵诗昨日在联合国人权理事会上就香港特区政府修改《逃犯条例》发表言论，但被中方代表打断。北京是否不允许香港民间人士在国际场合发表不利于大陆立场的言论？\n" +
+                    "                    对此，中国外交部发言人耿爽表示：\n" +
+                    "                    第一，香港是中国的特别行政区，香港事务纯属中国内政，任何国家和组织无权干预。\n" +
+                    "                    第二，有关的非政府组织违反了联合国宪章和联合国人权理事会的相关规定，在发言中挑战一个中国原则，干涉中国内政和主权，污蔑中国的人权状况，中方对此表示坚决反对，并给予强烈谴责。\n" +
+                    "                    第三，香港回归以来，一国两制港人治港高度自治的方针得到切实贯彻和落实，香港居民享有的各项权利和自由依法得到充分保障，事实有目共睹。保持香港的繁荣和稳定不仅符合中国的利益，也符合世界各国的利益。\n" +
+                    "                    此外，针对有记者问及何韵诗在发言中要求联合国人权理事会将中国除名，耿爽表示，这是痴心妄想，不自量力。\n" +
+                    "                ",//新闻内容
+                author:"路人甲",//作者名称
+                sectionId:753421,//所属板块ID
+                creatTime:"2019-07-22",//新闻创建时间
                 CommentMsg: '',
                 commentList:commentList,
                 counter: counters,
@@ -233,6 +244,12 @@
                 this.num++;
                 localStorage.setItem('num',this.num);
             },
+            replymessage:function (message) {
+                var index=message[1].data;
+                this.comment[index].childs.push(message[0])
+                console.log(this.comment)
+
+            }
         },
         components:{
                 "commentComponents":commentComponents,
@@ -250,22 +267,32 @@
         font-size: 8pt;
         margin-left: -5px;
     }
-    .commentlist{
-        margin-top:10px;
-    }
     button.submitactive{
-        background-color: #3db922;
+        background:#99CCFF;
+        background-image: -webkit-linear-gradient(top, #6699CC, #7fc8f0);
+        background-image: -moz-linear-gradient(top,#6699CC, #7fc8f0);
+        background-image: -ms-linear-gradient(top, #6699CC, #7fc8f0);
+        background-image: -o-linear-gradient(top, #6699CC, #7fc8f0);
+        background-image: linear-gradient(to bottom, #6699CC, #7fc8f0);
+        border-radius: 28px;
+        font-family: Georgia;
+        color: #ffffff;
+        font-size: 12px;
+        padding: 7px 25px 7px 25px;
+        border: solid #8ecef5 0px;
+        text-decoration: none;
+        outline:0;
         float: right;
-        width: 78px;
-        margin: 10px 900px;
-        padding: 8px 18px;
-        font-size: 16px;
-        border: none;
-        border-radius: 20px;
-        color: #fff!important;
-        cursor: pointer;
-        outline: none;
-        display: block;
+        margin-left: 927px;
+        margin-top: 1px}
+    button.submitactive:hover {
+        background: #4a8eb8;
+        background-image: -webkit-linear-gradient(top, #4a8eb8, #73bbeb);
+        background-image: -moz-linear-gradient(top, #4a8eb8, #73bbeb);
+        background-image: -ms-linear-gradient(top, #4a8eb8, #73bbeb);
+        background-image: -o-linear-gradient(top, #4a8eb8, #73bbeb);
+        background-image: linear-gradient(to bottom, #4a8eb8, #73bbeb);
+        text-decoration: none;
     }
     span.writeractive{
         cursor: pointer;
@@ -283,12 +310,12 @@
     .focus{
         padding: 1px 7px 2px 5px;
         font-size: 13px;
-        border-color: #42c02e;
+        border-color: #99CCFF;
         font-weight: 400;
         line-height: normal;
         border-radius: 40px;
         color: #fff;
-        background-color: #42c02e;
+        background-color: #3399CC;
         display: inline-block;
         margin-bottom: 3px;
         text-align: center;
@@ -343,7 +370,7 @@
     .likenumber{
         position: relative;
         padding: 9px 15px 12px 20px;
-        color: #EA6F5A;
+        color:  rgba(30,114,204,1);
         cursor: pointer;
         text-decoration: none;
         text-decoration-line: none;
@@ -357,7 +384,7 @@
         white-space: nowrap;
         line-height: 1.42857;
         user-select: none;
-        border: 1px solid #EA6F5A;
+        border: 2px solid rgba(67,156,216,1);
         border-radius: 40px;
     }
    .commentactive{
@@ -394,5 +421,9 @@
         cursor: text;
         white-space: pre-wrap;
         overflow-wrap: break-word;
+    }
+    .huifu{
+        margin-left: 40px;
+
     }
 </style>
