@@ -9,7 +9,7 @@
                     {{authorName}}
                 </h6>
                 <small class="text-muted">
-                    {{date}}
+                    {{commentDate}}
                 </small>
             </div>
             <p class="mb-1">
@@ -37,19 +37,15 @@
     </div>
 </template>
 <script>
-    import commentComponents from '@/components/commentComponents.vue'
     import store from '@/store'
     export default {
-        components:{
-            "commentComponents":commentComponents,
-        },
         name: "commentComponents",
         store,
         props:{
             Id:Number,
             authorId:Number,
             authorName:String,
-            date:String,
+            date:Number,
             commentmsg:String,
             replyUserName:String,
             pid:Number,
@@ -57,8 +53,25 @@
             postId:Number,
             index:Number,
         },
+        mounted: function () {
+                this.$nextTick(function () {
+                let ctimeTo=new Date(this.date);
+                var year = ctimeTo.getFullYear();
+                var month= ctimeTo.getMonth()+1;
+                var strDate = ctimeTo.getDate();
+                if (month >= 1 && month <= 9) {
+                    month = "0" + month;
+                }
+                if (strDate >= 0 && strDate <= 9) {
+                    strDate = "0" + strDate;
+                }
+               this.commentDate= year + "-" + month + "-" + strDate;
+
+        })
+        },
         data(){
             return{
+                commentDate:'',
                 ReplyMsg: '',
                 inputDisplay:false,
                 myName: store.state.userName,
@@ -107,12 +120,11 @@
                             authorId:500,
                             authorName:this.myName,
                             time:this.currentdate,
-                            content:this.CommentMsg,
-                            pid: this.authorId,
+                            content:this.ReplyMsg,
+                            pid: this.Id,
                             replyUserName: this.authorName,
                         }
                     }).then(function (response) {
-                        console.log(response);
                         if(response.data.status==0)
                         {
                             alert("回复成功");

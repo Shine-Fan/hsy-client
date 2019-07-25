@@ -10,9 +10,8 @@
                 <span :class="{writeractive:true}">{{author}}</span>
                 <b-link class="focus">+关注</b-link>
             </p>
-
-            <p :class="{modificationtime:true}">{{creatTime}} </p>
-            <div >
+            <p class="modificationtime">{{createTime}}</p>
+            <div>
                 <p
                    :class="{active:true}"
                    style="text-indent:2em;">
@@ -20,10 +19,6 @@
                 </p>
             </div>
         </div>
-<!--        <div>-->
-<!--            <button class=likenumber type="button" style="outline: none" @click="count()">喜欢 | {{num}}</button>-->
-<!--        </div>-->
-
         <div class="input-group mb-3" >
             <textarea class="commentactive"
                    placeholder="写下你的评论…"
@@ -41,7 +36,8 @@
                     v-for="(first,index) in comment"
                     :key="index"
                     id="index">
-                    <commentComponents :date=first.comment.creatTime
+                    <commentComponents
+                             :date=first.comment.createTime
                              :commentmsg = first.comment.content
                              :authorName=first.comment.authorName
                              :pid="first.comment.pid"
@@ -58,11 +54,11 @@
                                     v-for="(firstreply,replyindex) in first.childs"
                                     :key="replyindex" :id="first.comment.Id">
                                     <commentComponents
-                                            :date=firstreply.comment.time
+                                            :date=firstreply.comment.createTime
                                             :commentmsg = firstreply.comment.content
                                             :authorName=firstreply.comment.authorName
                                             :authorId=firstreply.comment.authorId
-                                            :Id=firstreply.comment.Id
+                                            :Id=firstreply.comment.id
                                             :pid=firstreply.comment.pid
                                             :postId=firstreply.comment.postId
                                             :replyUserName=firstreply.comment.replyUserName
@@ -89,7 +85,7 @@
         store,
         computed:{
             commentnumber:function () {
-                return Number(this.counter)+Number(this.comment.length)
+                return Number(this.comment.length)
             }
         },
 
@@ -109,7 +105,9 @@
                     this.newsContent=data.content;
                     this.author=data.author;
                     this.sectionId=data.sectionId;
-                    this.creatTime= Date(data.creatTime);
+                    let timeTo=new Date(data.createTime);
+                    timeTo=timeTo.toLocaleString()
+                    this.createTime= timeTo;
                     this.id=data.id;
                 }else{
                     alert("获取新闻失败"+response.data.msg);
@@ -141,18 +139,12 @@
 
         data() {
             return {
-                title:"何韵诗要联合国人权理事会将中国除名 外交部回应",//新闻名称
+                title:"",//新闻名称
                 id:1,//新闻表ID
-                newsContent:"日中国外交部例行记者会上，有记者提问称，香港艺人何韵诗昨日在联合国人权理事会上就香港特区政府修改《逃犯条例》发表言论，但被中方代表打断。北京是否不允许香港民间人士在国际场合发表不利于大陆立场的言论？\n" +
-                    "                    对此，中国外交部发言人耿爽表示：\n" +
-                    "                    第一，香港是中国的特别行政区，香港事务纯属中国内政，任何国家和组织无权干预。\n" +
-                    "                    第二，有关的非政府组织违反了联合国宪章和联合国人权理事会的相关规定，在发言中挑战一个中国原则，干涉中国内政和主权，污蔑中国的人权状况，中方对此表示坚决反对，并给予强烈谴责。\n" +
-                    "                    第三，香港回归以来，一国两制港人治港高度自治的方针得到切实贯彻和落实，香港居民享有的各项权利和自由依法得到充分保障，事实有目共睹。保持香港的繁荣和稳定不仅符合中国的利益，也符合世界各国的利益。\n" +
-                    "                    此外，针对有记者问及何韵诗在发言中要求联合国人权理事会将中国除名，耿爽表示，这是痴心妄想，不自量力。\n" +
-                    "                ",//新闻内容
-                author:"路人甲",//作者名称
+                newsContent:"",//新闻内容
+                author:"",//作者名称
                 sectionId:753421,//所属板块ID
-                creatTime:"2019-07-22",//新闻创建时间
+                creatTime:'',//新闻创建时间
                 CommentMsg: '',
                 commentList:commentList,
                 counter: counters,
@@ -177,17 +169,18 @@
                     if(this.CommentMsg!='')
                     {
                         var date = new Date();
-                        var seperator1 = "-";
-                        var year = date.getFullYear();
-                        var month = date.getMonth() + 1;
-                        var strDate = date.getDate();
-                        if (month >= 1 && month <= 9) {
-                            month = "0" + month;
-                        }
-                        if (strDate >= 0 && strDate <= 9) {
-                            strDate = "0" + strDate;
-                        }
-                        this.currentdate = year + seperator1 + month + seperator1 + strDate;
+                        // var seperator1 = "-";
+                        // var year = date.getFullYear();
+                        // var month = date.getMonth() + 1;
+                        // var strDate = date.getDate();
+                        // if (month >= 1 && month <= 9) {
+                        //     month = "0" + month;
+                        // }
+                        // if (strDate >= 0 && strDate <= 9) {
+                        //     strDate = "0" + strDate;
+                        // }
+                        // this.currentdate = year + seperator1 + month + seperator1 + strDate;
+                        this.currentdate=date.getTime();
                         var tem=[];
                        tem={
                            comment:
@@ -203,7 +196,6 @@
                            childs:[]
                         }
                         this.comment.push(tem);
-
                     }
                     else{
                         alert("请输入你的评论！")
@@ -221,7 +213,7 @@
                         content:this.CommentMsg,
                     }
                 }).then(function (response) {
-                    console.log(response);
+                    console.log(response)
                     if(response.data.status==0)
                     {
                         alert("评论成功");
@@ -299,7 +291,7 @@
         box-sizing: border-box;
         font-size: 16px;
     }
-    p.modificationtime{
+    .modificationtime{
         margin-top: 5px;
         font-size: 12px;
         color: #969696
