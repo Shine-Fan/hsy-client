@@ -1,7 +1,7 @@
 <template>
 <div class="Like">
     <div>这是个人点赞</div>
-    <button @click="Commentget">123</button>
+    <button @click="Commentget">12</button>
     <button @click="gett">1234</button>
 </div>
 </template>
