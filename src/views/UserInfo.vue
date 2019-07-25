@@ -52,7 +52,7 @@ export default {
 </script>
 
 <style scoped>
-.info{background: lightgreen/* #fff */; width: 300px; height: 180px; text-align: left;}
+.info{background: #545c64/* #fff */; width: 300px; height: 180px; text-align: left; color: #fff}
 .portrait{width: 80px; height: 80px; overflow:hidden; -webkit-border-radius: 40px;
 -moz-border-radius: 40px;
 -ms-border-radius: 40px;
