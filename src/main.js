@@ -6,7 +6,6 @@ import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 import axios from 'axios'
 import Qs from 'qs'
-import Mock from '@/mock/mock'
 Vue.prototype.$ajax = axios;
 Vue.prototype.qs = Qs;
 
