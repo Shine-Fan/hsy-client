@@ -11,7 +11,7 @@
                 <b-link class="focus">+关注</b-link>
             </p>
 
-            <p :class="{modificationtime:true}">{{creatTime}} &emsp;评论 {{commentnumber}}       &emsp;   喜欢 {{num}}</p>
+            <p :class="{modificationtime:true}">{{creatTime}} </p>
             <div >
                 <p
                    :class="{active:true}"
@@ -20,9 +20,9 @@
                 </p>
             </div>
         </div>
-        <div>
-            <button class=likenumber type="button" style="outline: none" @click="count()">喜欢 | {{num}}</button>
-        </div>
+<!--        <div>-->
+<!--            <button class=likenumber type="button" style="outline: none" @click="count()">喜欢 | {{num}}</button>-->
+<!--        </div>-->
 
         <div class="input-group mb-3" >
             <textarea class="commentactive"
@@ -41,17 +41,17 @@
                     v-for="(first,index) in comment"
                     :key="index"
                     id="index">
-                    <commentComponents :date=first.comment.time
+                    <commentComponents :date=first.comment.creatTime
                              :commentmsg = first.comment.content
-                             :msg=first.comment.authorId
+                             :authorName=first.comment.authorName
                              :pid="first.comment.pid"
                              :authorId=first.comment.authorId
                              :postId=first.comment.postId
-                             :Id=first.comment.Id
-                             :replyUserId=first.comment.replyUserId
+                             :Id=first.comment.id
+                             :replyUserName=first.comment.replyUserName
                              :index="index"
                              @replymessage="replymessage"
-                                       class="huifu">
+                             class="huifu">
                     </commentComponents>
                             <ul class="replylist" style="list-style: none">
                                 <li
@@ -60,11 +60,12 @@
                                     <commentComponents
                                             :date=firstreply.comment.time
                                             :commentmsg = firstreply.comment.content
-                                            :msg=firstreply.comment.authorId
+                                            :authorName=firstreply.comment.authorName
                                             :authorId=firstreply.comment.authorId
                                             :Id=firstreply.comment.Id
                                             :pid=firstreply.comment.pid
                                             :postId=firstreply.comment.postId
+                                            :replyUserName=firstreply.comment.replyUserName
                                             @replymessage="replymessage"
                                             :index="index">
                                     </commentComponents>
@@ -79,91 +80,7 @@
 <script>
     import store from '@/store'
     import commentComponents from '@/components/commentComponents.vue'
-
-    var comment=[
-        {
-            comment: {
-                Id: 1,
-                postId: 200,
-                authorId: 300,
-                time: '2019-07-17',
-                content: '这应该是第一条评论',
-                pid: '',
-                replyUserId: ''
-                },
-            childs:
-                [{comment:
-                        {
-                            Id: 1,
-                            postId: 200,
-                            authorId: 500,
-                            time: '2019-07-18',
-                            content: '第一条评论的第一个回复',
-                            pid: 300,
-                            replyUserId: '小明'//小明的authorid是300
-                        }},
-                {comment:{
-                            Id: 1,
-                            postId: 200,
-                            authorId: 5000,
-                            time: '2019-07-18',
-                            content: '第一个评论的第二个回复',
-                            pid: 300,
-                            replyUserId: '小明'//小明的authorid是300
-                        }},
-                {comment:{
-                            Id: 100,
-                            postId: 200,
-                            authorId: 50000,
-                            time: '2019-07-18',
-                            content: '第一个评论的第三个回复',
-                            pid: 300,
-                            replyUserId: '小明'//小明的authorid是300
-                        }},]
-        },
-
-    {
-        comment: {
-                Id: 2,
-                postId: 200,
-                authorId: 400,
-                time: '2019-07-17',
-                content: '这应该是第二条评论',
-                pid: '',
-                replyUserId: ''
-        },
-        childs:
-            [{comment:
-        {
-            Id: 2,
-            postId: 200,
-            authorId: 500,
-            time: '2019-07-18',
-            content: '第二条评论的第一个回复',
-            pid: 400,
-            replyUserId: '小明'//小明的authorid是300
-        }},
-       { comment:{
-                Id: 2,
-                postId: 200,
-                authorId: 5000,
-                time: '2019-07-18',
-                content: '第二个评论的第二个回复',
-                pid: 400,
-                replyUserId: '小明'//小明的authorid是300
-        }},
-        {comment:{
-                Id: 2,
-                postId: 200,
-                authorId: 50000,
-                time: '2019-07-18',
-                content: '第二个评论的第三个回复',
-                pid: 400,
-                replyUserId: '小明'//小明的authorid是300
-        }},]
-    },
-
-    ]
+    let comment=[];
     var commentList=[];
     let counters=0;
     let num=0;
@@ -175,11 +92,58 @@
                 return Number(this.counter)+Number(this.comment.length)
             }
         },
+
+        created:function(){
+            // 获取新闻详情页面
+            this.$ajax({
+                method: 'post',
+                url:'http://106.15.192.168/news/find_one',
+                header:{"content-type":"application/json"},
+                data:{
+                    id:this.id
+                }
+            }).then((response)=> {
+                if(response.data.status==0){
+                    let data=response.data.data;
+                    this.title=data.title;
+                    this.newsContent=data.content;
+                    this.author=data.author;
+                    this.sectionId=data.sectionId;
+                    this.creatTime= Date(data.creatTime);
+                    this.id=data.id;
+                }else{
+                    alert("获取新闻失败"+response.data.msg);
+                }
+            }).catch(err=>{
+                    console.log(`error catched:${err}`);
+                }
+            )
+            // 获取评论详情页面
+            this.$ajax({
+                method: 'post',
+                url:'http://106.15.192.168/news/comment/find',
+                header:{"content-type":"application/json"},
+                data:{
+                    postId:this.id,
+                }
+            }).then((response)=> {
+                let data=response.data.data;
+                if(response.data.status==0){
+                    this.comment=data;
+                }
+                else{
+                    alert("获取评论列表失败"+response.data.msg);
+                }
+            }).catch(err=>{
+                console.log(`error catched:${err}`);
+            })
+        },
+
         data() {
             return {
                 title:"何韵诗要联合国人权理事会将中国除名 外交部回应",//新闻名称
-                id:11112222,//新闻表ID
-                newsContent:"在9日中国外交部例行记者会上，有记者提问称，香港艺人何韵诗昨日在联合国人权理事会上就香港特区政府修改《逃犯条例》发表言论，但被中方代表打断。北京是否不允许香港民间人士在国际场合发表不利于大陆立场的言论？\n" +
+                id:1,//新闻表ID
+                newsContent:"日中国外交部例行记者会上，有记者提问称，香港艺人何韵诗昨日在联合国人权理事会上就香港特区政府修改《逃犯条例》发表言论，但被中方代表打断。北京是否不允许香港民间人士在国际场合发表不利于大陆立场的言论？\n" +
                     "                    对此，中国外交部发言人耿爽表示：\n" +
                     "                    第一，香港是中国的特别行政区，香港事务纯属中国内政，任何国家和组织无权干预。\n" +
                     "                    第二，有关的非政府组织违反了联合国宪章和联合国人权理事会的相关规定，在发言中挑战一个中国原则，干涉中国内政和主权，污蔑中国的人权状况，中方对此表示坚决反对，并给予强烈谴责。\n" +
@@ -194,14 +158,17 @@
                 counter: counters,
                 key: 'key',
                 replykey: 'replykey',
-                msg: store.state.userName,
+                myName: store.state.userName,
                 num:num,
-                // replycomment:replycomment,
                 inputDisplay:false,
                 // replyCounters:replycomment.length,
                 comment:comment,
+                replyUserName:'',
+                pid:0,
+                authorId:1,
             }
         },
+
         methods: {
             add() {
                 if (this.current === '') {
@@ -224,21 +191,52 @@
                         var tem=[];
                        tem={
                            comment:
-                                   { content:this.CommentMsg,
-                                    time:this.currentdate,
-                                    authorId:987654321,},
+                                   {
+                                       postId:this.id,
+                                       authorId:987654321,
+                                       authorName:this.myName,
+                                       time:this.currentdate,
+                                       content:this.CommentMsg,
+                                       pid:'',
+                                       replyUserName:''
+                                    },
                            childs:[]
                         }
-                        comment.push(tem);
-                        this.CommentMsg = '';
-                        // location.reload()
-                        // this.reload();
+                        this.comment.push(tem);
+
                     }
                     else{
                         alert("请输入你的评论！")
                     }
-
-
+                    //给新闻添加评论
+                this.$ajax({
+                    method: 'post',
+                    url:'http://106.15.192.168/news/comment/add',
+                    header:{"content-type":"application/json"},
+                    data:{
+                        postId:this.id,
+                        authorId:this.authorId,
+                        authorName:this.myName,
+                        time:this.currentdate,
+                        content:this.CommentMsg,
+                    }
+                }).then(function (response) {
+                    console.log(response);
+                    if(response.data.status==0)
+                    {
+                        alert("评论成功");
+                    }
+                    else if(response.data.status==-1)
+                    {
+                        alert("评论失败"+response.msg);
+                    }
+                    else{
+                        alert("错误")
+                    }
+                }).catch(err=>{
+                    console.log(`error catched:${err}`);
+                })
+                this.CommentMsg = '';
             },
             count(){
                 this.num++;
@@ -247,7 +245,6 @@
             replymessage:function (message) {
                 var index=message[1].data;
                 this.comment[index].childs.push(message[0])
-                console.log(this.comment)
 
             }
         },

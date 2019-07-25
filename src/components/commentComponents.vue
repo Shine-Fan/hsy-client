@@ -2,11 +2,11 @@
     <div>
         <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
             <div class="d-flex w-100 justify-content-between">
-                <h6 class="mb-1" v-if="pid">
-                    {{msg}}@{{pid}}
+                <h6 class="mb-1" v-if="Boolean(pid)">
+                    {{authorName}}@{{replyUserName}}
                 </h6>
-                <h6 class="mb-1" v-if="!pid">
-                    {{msg}}
+                <h6 class="mb-1" v-if="!Boolean(pid)">
+                    {{authorName}}
                 </h6>
                 <small class="text-muted">
                     {{date}}
@@ -38,23 +38,20 @@
 </template>
 <script>
     import commentComponents from '@/components/commentComponents.vue'
-    // let replyList=[];
-    // let replyCounters=0;
-    // let replyNum=0;
-    // let msg=store.state.userName;
-    // let isreply=false;
+    import store from '@/store'
     export default {
         components:{
             "commentComponents":commentComponents,
         },
         name: "commentComponents",
+        store,
         props:{
             Id:Number,
             authorId:Number,
-            msg:String,
+            authorName:String,
             date:String,
             commentmsg:String,
-            replyUserId:String,
+            replyUserName:String,
             pid:Number,
             content:String,
             postId:Number,
@@ -62,46 +59,9 @@
         },
         data(){
             return{
-                comment:{
-                    comment: {
-                        Id: 100,
-                        postId: 200,
-                        authorId: 300,
-                        time: '2019-07-17',
-                        content: '这应该是第一条评论',
-                        pid: '',
-                        replyUserId: ''
-                    },
-                    childs:
-                        [{comment:{
-                            id: 100,
-                                postId: 200,
-                            authorId: 500,
-                            time: '2019-07-18',
-                            content: '第一条评论的第一个回复',
-                            pid: 400,
-                            replyUserId: '小明'}},//小明的authorid是300
-                        {comment:{
-                    id: 100,
-                    postId: 200,
-                    authorId: 5000,
-                    time: '2019-07-18',
-                    content: '第一个评论的第二个回复',
-                    pid: 400,
-                    replyUserId: '小明'//小明的authorid是300
-            }},
-                        {comment:{
-                id: 100,
-                    postId: 200,
-                    authorId: 50000,
-                    time: '2019-07-18',
-                    content: '第一个评论的第三个回复',
-                    pid: 400,
-                    replyUserId: '小明'//小明的authorid是300
-            }},]
-                },
                 ReplyMsg: '',
                 inputDisplay:false,
+                myName: store.state.userName,
             }
         },
         methods:{
@@ -126,24 +86,47 @@
                         strDate = "0" + strDate;
                     }
                     this.replycurrentdate = year + seperator1 + month + seperator1 + strDate;
-                    // var tem=[];
-                    // tem={
-                    //     comment:
-                    //         {   content:this.ReplyMsg,
-                    //             time:this.replycurrentdate,
-                    //             authorId:987654321,},
-                    // }
                     var message=[{comment:
                             {
                                 Id: this.Id,
                                 postId: this.postId,
                                 authorId: 500,
+                                authorName:this.myName,
                                 time: this.replycurrentdate,
                                 content:this.ReplyMsg,
                                 pid: this.authorId,
-                                replyUserId: '小明',//小明的authorid是300
+                                replyUserName: this.authorName,//zhangsan的authorid是500
                             }},{data:this.index}]
                     this.$emit("replymessage",message)
+                    this.$ajax({
+                        method: 'post',
+                        url:'http://106.15.192.168/news/comment/add',
+                        header:{"content-type":"application/json"},
+                        data:{
+                            postId:this.postId,
+                            authorId:500,
+                            authorName:this.myName,
+                            time:this.currentdate,
+                            content:this.CommentMsg,
+                            pid: this.authorId,
+                            replyUserName: this.authorName,
+                        }
+                    }).then(function (response) {
+                        console.log(response);
+                        if(response.data.status==0)
+                        {
+                            alert("回复成功");
+                        }
+                        else if(response.data.status==-1)
+                        {
+                            alert("回复失败"+response.data.msg);
+                        }
+                        else{
+                            alert("错误")
+                        }
+                    }).catch(err=>{
+                        console.log(`error catched:${err}`);
+                    })
 
                 }
                 else{
@@ -154,7 +137,7 @@
         },
         computed:{
             replyauthorId:function () {
-                return "回复"+this.authorId+":";
+                return "回复"+this.authorName+":";
             }
         }
     }
