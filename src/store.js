@@ -11,10 +11,8 @@ export default new Vuex.Store({
     transmit(){
       this.state.userName
     }
-
   },
   actions:{
-
   }
 })
 

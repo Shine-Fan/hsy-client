@@ -88,17 +88,7 @@
                 if(this.ReplyMsg!=='')
                 {
                     var date = new Date();
-                    var seperator1 = "-";
-                    var year = date.getFullYear();
-                    var month = date.getMonth() + 1;
-                    var strDate = date.getDate();
-                    if (month >= 1 && month <= 9) {
-                        month = "0" + month;
-                    }
-                    if (strDate >= 0 && strDate <= 9) {
-                        strDate = "0" + strDate;
-                    }
-                    this.replycurrentdate = year + seperator1 + month + seperator1 + strDate;
+                    this.replycurrentdate = date.getTime();
                     var message=[{comment:
                             {
                                 Id: this.Id,
@@ -119,7 +109,7 @@
                             postId:this.postId,
                             authorId:500,
                             authorName:this.myName,
-                            time:this.currentdate,
+                            time:this.replycurrentdate,
                             content:this.ReplyMsg,
                             pid: this.Id,
                             replyUserName: this.authorName,

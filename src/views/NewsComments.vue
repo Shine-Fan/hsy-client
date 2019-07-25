@@ -144,7 +144,7 @@
                 newsContent:"",//新闻内容
                 author:"",//作者名称
                 sectionId:753421,//所属板块ID
-                creatTime:'',//新闻创建时间
+                createTime:'',//新闻创建时间
                 CommentMsg: '',
                 commentList:commentList,
                 counter: counters,
