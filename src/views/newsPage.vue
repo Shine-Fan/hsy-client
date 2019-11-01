@@ -4,24 +4,24 @@
       <div class="news-menu">
         <div class="choose-bar">
           <ul class="layer1">
-            <li v-for="(item,index) in chooseBarContent"
-                :key="index"
+            <li v-for="(item1,index1) in chooseBarContent"
+                :key="index1"
                 class="layer1-item"
-                :class="{'active1':isActive1 == index}"
-                @click="changeStatus(index,1)"
-            >{{item.class}}
+                :class="{'active1':isActive1 == index1}"
+                @click="changeStatus(index1,item1.id,1)"
+            >{{item1.name}}
             </li>
           </ul>
         </div>
         <div class="choose-bar">
           <ul class="layer2">
-            <li v-for="(item,index) in chooseBarContent[isActive1].children"
-                :key="index"
+            <li v-for="(item2,index2) in chooseBarContent[isActive1].children"
+                :key="index2"
             >
               <div class="layer2-item"
-                   :class="{'active2':isActive2 == index}"
-                   @click="changeStatus(index,2)"
-              >{{item.class}}
+                   :class="{'active2':isActive2 == index2}"
+                   @click="changeStatus(index2,item2.id,2)"
+              >{{item2.name}}
               </div>
             </li>
           </ul>
@@ -33,10 +33,11 @@
       <newsBar v-for="(item,index) in newsBarContent"
                :key="index"
                :imgSrc="item.src"
-               :newsName="item.name"
-               :newsDate="item.date"
-               :summary="item.summary"
-               :readerNum="item.number"
+               :newsName="item.title"
+               :newsDate="item.createTime"
+               :newsAuthor="item.author"
+               :newsId = "item.id"
+               @toCertainNews="toCertainNews"
       ></newsBar>
     </div>
   </div>
@@ -54,133 +55,291 @@ export default {
     return {
       chooseBarContent: [
         {
-          class: '新闻头条',
+          name: '新闻头条',
+          id: '1',
           children: [
             {
-              class: '热点资讯'
+              name: '热点资讯',
+              id: '11'
             },
             {
-              class: '三农快讯'
+              name: '三农快讯',
+              id: '12'
             },
             {
-              class: '政策法规'
+              name: '政策法规',
+              id: '13'
             },
             {
-              class: '农资趣事'
+              name: '农资趣事',
+              id: '14'
             },
             {
-              class: '打假专区'
+              name: '打假专区',
+              id: '15'
             },
             {
-              class: '人物周刊'
+              name: '人物周刊',
+              id: '16'
             },
             {
-              class: '展会信息'
+              name: '展会信息',
+              id: '17'
             },
             {
-              class: '农资企业'
+              name: '农资企业',
+              id: '18'
             }
           ]
         },
         {
-          class: '行情数据',
+          name: '行情数据',
+          id: '2',
           children: [
             {
-              class: '每日行情'
+              name: '每日行情',
+              id: '21'
             },
             {
-              class: '价格走势'
+              name: '价格走势',
+              id: '22'
             },
             {
-              class: '趋势预测'
+              name: '趋势预测',
+              id: '23'
             },
             {
-              class: '价格预测'
+              name: '价格预测',
+              id: '24'
             },
             {
-              class: '涨跌预警'
+              name: '涨跌预警',
+              id: '25'
             },
             {
-              class: '价格地图'
+              name: '价格地图',
+              id: '26'
             },
             {
-              class: '产量价格'
+              name: '产量价格',
+              id: '27'
             }
           ]
         }
       ],
       newsBarContent: [
         {
+          id: 1,
           src: require('../assets/news1.jpg'),
-          name: '玉米、小麦卢瑟品种指标体系发布',
-          date: '2019-08-20',
-          number: 999
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          createTime: 1563174571000,
+          author: 'Sam'
 
         },
         {
+          id: 2,
           src: require('../assets/news2.jpg'),
-          name: '油菜籽质好价稳',
-          date: '2019-08-19',
-          number: 699
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Ann'
         },
         {
+          id: 3,
           src: require('../assets/news3.jpg'),
-          name: '国产大豆货源紧张',
-          date: '2019-08-20',
-          number: 399
+          title: '国产大豆货源紧张',
+          createTime: 1563174571000,
+          author: 'Ken'
         },
         {
+          id: 4,
           src: require('../assets/news4.jpg'),
-          name: '玉米、小麦卢瑟品种指标体系发布',
-          date: '2019-08-20',
-          number: 999
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          createTime: 1563174571000,
+          author: 'Ben'
 
         },
         {
+          id: 5,
           src: require('../assets/news5.jpg'),
-          name: '油菜籽质好价稳',
-          date: '2019-08-19',
-          number: 699
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Liam'
         },
         {
+          id: 6,
           src: require('../assets/news6.png'),
-          name: '国产大豆货源紧张',
-          date: '2019-08-20',
-          number: 399
+          title: '国产大豆货源紧张',
+          date: 1563174571000,
+          author: 'Eri'
         },
         {
+          id: 7,
           src: require('../assets/news7.jpg'),
-          name: '玉米、小麦卢瑟品种指标体系发布',
-          date: '2019-08-20',
-          number: 999
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          date: 1563174571000,
+          author: 'Lisa'
 
         },
         {
+          id: 8,
           src: require('../assets/news8.jpg'),
-          name: '油菜籽质好价稳',
-          date: '2019-08-19',
-          number: 699
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Wang'
         },
         {
+          id: 9,
           src: require('../assets/news1.jpg'),
-          name: '国产大豆货源紧张',
-          date: '2019-08-20',
-          number: 399
+          title: '国产大豆货源紧张',
+          createTime: 1563174571000,
+          author: 'Adam'
+        }
+      ],
+      newsBar_origin: [
+        {
+          id: 1,
+          src: require('../assets/news1.jpg'),
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          createTime: 1563174571000,
+          author: 'Sam'
+
+        },
+        {
+          id: 2,
+          src: require('../assets/news2.jpg'),
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Ann'
+        },
+        {
+          id: 3,
+          src: require('../assets/news3.jpg'),
+          title: '国产大豆货源紧张',
+          createTime: 1563174571000,
+          author: 'Ken'
+        },
+        {
+          id: 4,
+          src: require('../assets/news4.jpg'),
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          createTime: 1563174571000,
+          author: 'Ben'
+
+        },
+        {
+          id: 5,
+          src: require('../assets/news5.jpg'),
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Liam'
+        },
+        {
+          id: 6,
+          src: require('../assets/news6.png'),
+          title: '国产大豆货源紧张',
+          date: 1563174571000,
+          author: 'Eri'
+        },
+        {
+          id: 7,
+          src: require('../assets/news7.jpg'),
+          title: '玉米、小麦卢瑟品种指标体系发布',
+          date: 1563174571000,
+          author: 'Lisa'
+
+        },
+        {
+          id: 8,
+          src: require('../assets/news8.jpg'),
+          title: '油菜籽质好价稳',
+          createTime: 1563174571000,
+          author: 'Wang'
+        },
+        {
+          id: 9,
+          src: require('../assets/news1.jpg'),
+          title: '国产大豆货源紧张',
+          createTime: 1563174571000,
+          author: 'Adam'
         }
       ],
       isActive1: 0,
-      isActive2: 0
+      isActive2: -1,
+      pId: -1
     }
   },
   methods: {
-    changeStatus (index, num) {
+    changeStatus (index, id, num) {
       if (num === 1) {
         this.isActive1 = index
-        this.isActive2 = 0
+        this.isActive2 = -1
+        this.pId = id
+        this.requestNewsItem(this.pId, 1)
       } else if (num === 2) {
-        this.isActive2 = index
+        if (this.isActive2 === -1 || this.isActive2 !== index) {
+          this.isActive2 = index
+          this.requestNewsItem(id, 2)
+        } else {
+          this.isActive2 = -1
+          this.requestNewsItem(this.pId, 1)
+        }
       }
+    },
+    requestNewsItem (id, index) {
+      // 请求属于父id的所有新闻列表
+      if (index === 1) {
+        this.newsBarContent = this.newsBar_origin
+        // this.$axios({
+        //   method: 'post',
+        //   url: 'http://106.15.192.168/news/find_all',
+        //   data: {
+        //   },
+        //   headers: { 'content-type': 'application/json' }
+        // }).then((response) => {
+        //   this.chooseBarContent = response.data.data
+        //   console.log('获取所属父id的新闻列表成功')
+        // })
+      } else if (index === 2) {
+        this.$axios({
+          method: 'post',
+          url: 'http://106.15.192.168/news/find_section',
+          data: {
+            sectionId: 1
+          },
+          headers: { 'content-type': 'application/json' }
+        }).then((response) => {
+          console.log('获取所属子id的新闻列表成功')
+          this.newsBarContent = response.data.data
+          console.log(response)
+        })
+      }
+    },
+    toCertainNews (id) {
+      console.log(id)
+      this.$router.push({ path: '/news_detail', query: { id: id } })
     }
+  },
+  created () {
+    // 请求获取新闻板块名称
+    this.$axios({
+      method: 'get',
+      url: 'http://106.15.192.168/news/section',
+      header: { 'content-type': 'application/json'}
+    }).then((response) => {
+      console.log('获取新闻板块名称成功')
+      // this.chooseBarContent = response.data.data
+    })
+    // 获取所属父板块的所有新闻
+    // this.$axios({
+    //   method: 'post',
+    //   url: 'http://106.15.192.168/news/find_all',   //!!!!接口文档需要修改
+    //   data: {
+    //   },
+    //   header: { 'content-type': 'application/json' }
+    // }).then((res) => {
+    //   //this.newsBarContent = res.data.data
+    //   console.log(res)
+    // })
   }
 }
 </script>

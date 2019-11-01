@@ -10,8 +10,13 @@ import newsDetail from './views/newsDetail'
 import communityDetail from './views/communityDetail'
 import search from './views/search'
 import login from './views/login'
-Vue.use(Router)
+import certificateSearch from './views/certificateSearch'
+import searchLineChart from './views/searchLineChart'
+import communityArticle from './views/communityArticle'
+import searchMultiLineChart from './views/searchMultiLineChart'
+import searchPieChart from './views/searchPieChart'
 
+Vue.use(Router)
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -32,6 +37,26 @@ export default new Router({
       component: login
     },
     {
+      path: '/search_line_chart',
+      name: 'searchLineChart',
+      component: searchLineChart
+    },
+    {
+      path: '/search_multi_line_chart',
+      name: 'searchMultiLineChart',
+      component: searchMultiLineChart
+    },
+    {
+      path: '/search_pie_chart',
+      name: 'searchPieChart',
+      component: searchPieChart
+    },
+    {
+      path: '/certificate_search',
+      name: 'certificateSearch',
+      component: certificateSearch
+    },
+    {
       path: '/news',
       name: 'newsPage',
       component: newsPage
@@ -45,6 +70,10 @@ export default new Router({
       path: '/community_chat_info',
       name: 'communityChatInfo',
       component: communityChatInfo
+    }, {
+      path: '/community_article',
+      name: 'communityArticle',
+      component: communityArticle
     },
     {
       path: '/member_page',

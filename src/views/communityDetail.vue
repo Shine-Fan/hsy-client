@@ -47,11 +47,8 @@
       <div class="choose-content">
         <community-bar-in-detail v-for="(item,index) in newsList"
                                  :key="index"
-                                 :usr_img="item.usr_img"
-                                 :usr_name="item.usr_name"
-                                 :time="item.time"
-                                 :news_img="item.news_img"
-                                 :news_title="item.news_title"
+                                 :item="item"
+                                 @toCertainArticle="toCertainArticle"
         ></community-bar-in-detail>
       </div>
     </div>
@@ -72,6 +69,7 @@ export default {
       introduction: '“中科发5号”等新品种在产量、抗病等农艺性状中表现突出，外观品质优、食味佳，丰收在即。',
       newsList: [
         {
+          id: 1,
           usr_img: require('../assets/news7.jpg'),
           usr_name: '农科小能手',
           time: '09-12 17:20',
@@ -80,6 +78,7 @@ export default {
 
         },
         {
+          id: 2,
           usr_img: require('../assets/news7.jpg'),
           usr_name: '农科小能手',
           time: '09-12 17:20',
@@ -88,6 +87,7 @@ export default {
 
         },
         {
+          id: 3,
           usr_img: require('../assets/news7.jpg'),
           usr_name: '农科小能手',
           time: '09-12 17:20',
@@ -96,6 +96,7 @@ export default {
 
         },
         {
+          id: 4,
           usr_img: require('../assets/news7.jpg'),
           usr_name: '农科小能手',
           time: '09-12 17:20',
@@ -104,6 +105,7 @@ export default {
 
         },
         {
+          id: 5,
           usr_img: require('../assets/news7.jpg'),
           usr_name: '农科小能手',
           time: '09-12 17:20',
@@ -118,6 +120,9 @@ export default {
     change_item (index) {
       this.itemNum = index
     },
+    toCertainArticle: function (id) {
+      this.$router.push({ path: '/community_article', query: { id: id } })
+    },
     topTab () { // 功能：当页面滑动到一定位置，则固定选择栏
       var scrollTop = document.getElementsByClassName('main')[0].scrollTop
       var index = document.getElementsByClassName('choose-bar')[0].offsetTop
@@ -128,6 +133,19 @@ export default {
       }
       // console.log(this.isFix)
     }
+  },
+  created () {
+    var id = this.$route.query.id
+    console.log(id)
+    this.$axios({
+      method: 'post',
+      url: 'http://106.15.192.168/group/findById',
+      headers: { 'content-type': 'application/json',
+        'token': this.$store.state.token },
+      data: { id: id }
+    }).then((response) => {
+      console.log(response)
+    })
   },
   mounted () {
     this.$nextTick(() => {

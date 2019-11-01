@@ -33,8 +33,8 @@
               <div class="layer1-item" v-for="(item,index) in chooseBarContent"
                    :key="index"
                    :class="{'active1':isActive1==index}"
-                   @click="changeStatus(index,1)"
-              >{{item.name}}</div>
+                   @click="changeStatus(index,item.section.id,1)"
+              >{{item.section.name}}</div>
             </div>
           </div>
           <div style="width:1px;height:2rem;background-color:gray"></div>
@@ -45,27 +45,27 @@
         <div class="layer2">
           <div style="width:90%">
             <div class="layer2-left">
-              <div class="layer2-item" v-for="(item,index) in chooseBarContent[isActive1].children"
+              <div class="layer2-item" v-for="(item,index) in chooseBarContent[isActive1].childs"
                    :key="index"
                    :class="{'active2':isActive2 == index}"
-                   @click="changeStatus(index,2)"
-              >{{item.name}}
+                   @click="changeStatus(index,item.section.id,2)"
+              >{{item.section.name}}
               </div>
             </div>
           </div>
           <div style="width:10%;display: flex;align-items: center">
-            <div :class="chooseBarContent[isActive1].children[isActive2].children.length !== 0 ? 'option2-active':'option2-no-active'" class="layer2-right" @click="option2($event)">
+            <div  :class="(isActive2 !== -1 &&chooseBarContent[isActive1].childs[isActive2].childs.length !== 0) ? 'option2-active':'option2-no-active'" class="layer2-right" @click="option2($event)">
               <i v-if="!isOption2" class="fa fa-angle-down"></i>
               <i v-if="isOption2" class="fa fa-angle-up"></i>
             </div>
           </div>
         </div>
         <div v-if="isOption2" class="layer3">
-          <div v-for="(item,index) in chooseBarContent[isActive1].children[isActive2].children"
+          <div v-for="(item,index) in chooseBarContent[isActive1].childs[isActive2].childs"
                :key="index"
                style="margin:0.25rem 1rem;padding:0.1rem 0.5rem;white-space: nowrap;border:1px solid #bfbfbf;border-radius: 1rem;"
-               @click="changeStatus(index,3)"
-          >{{item.name}}</div>
+               @click="changeStatus(index,item.section.id,3)"
+          >{{item.section.name}}</div>
         </div>
       </div>
       <div style="width:100%;height:6.8rem"></div>
@@ -73,11 +73,9 @@
         <div class="layer4-content">
           <communityBar v-for="(item, index) in communityBarContent"
                         :key="index"
-                        :imgSrc="item.src"
-                        :communityName="item.name"
-                        :communityMotto="item.motto"
-                        :memberNum="item.number"
-          ></communityBar>
+                        :item="item"
+                        @toCertainCommuntiy="toCertainCommunity"
+          ></communityBar>  <!--要接收从子组件传来的值，函数名后面就不要加括号-->
         </div>
       </div>
     </div>
@@ -96,163 +94,361 @@ export default {
       category: -1,
       payment: -1,
       isActive1: 0, // 第一选择
-      isActive2: 0, // 第二选择
+      isActive2: -1, // 第二选择
       chooseBarContent: [
         {
-          name: '农技交流',
-          children: [
+          section: {
+            id: 1,
+            name: '农技交流',
+            ownerId: 1, // 群主id
+            rank: 1,
+            parent: 0,
+            icon: '',
+            whoRead: 0,
+            accessRoles: 0,
+            accessPermissionCode: '',
+            status: 0
+          },
+          childs: [
             {
-              name: '病害',
-              children: [
+              section: {
+                id: 11,
+                name: '病害',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 1,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: [
                 {
-                  name: '蔬菜'
+                  section: {
+                    id: 111,
+                    name: '蔬菜',
+                    ownerId: 1, // 群主id
+                    rank: 1,
+                    parent: 11,
+                    icon: '',
+                    whoRead: 0,
+                    accessRoles: 0,
+                    accessPermissionCode: '',
+                    status: 0
+                  },
+                  childs: []
                 },
                 {
-                  name: '果树'
+                  section: {
+                    id: 112,
+                    name: '果树',
+                    ownerId: 1, // 群主id
+                    rank: 1,
+                    parent: 11,
+                    icon: '',
+                    whoRead: 0,
+                    accessRoles: 0,
+                    accessPermissionCode: '',
+                    status: 0
+                  },
+                  childs: []
                 },
                 {
-                  name: '大田作物'
+                  section: {
+                    id: 113,
+                    name: '大田作物',
+                    ownerId: 1, // 群主id
+                    rank: 1,
+                    parent: 11,
+                    icon: '',
+                    whoRead: 0,
+                    accessRoles: 0,
+                    accessPermissionCode: '',
+                    status: 0
+                  },
+                  childs: []
                 },
                 {
-                  name: '药用植物'
+                  section: {
+                    id: 114,
+                    name: '药用植物',
+                    ownerId: 1, // 群主id
+                    rank: 1,
+                    parent: 11,
+                    icon: '',
+                    whoRead: 0,
+                    accessRoles: 0,
+                    accessPermissionCode: '',
+                    status: 0
+                  },
+                  childs: []
                 },
                 {
-                  name: '林木及草坪'
+                  section: {
+                    id: 115,
+                    name: '林木及草坪',
+                    ownerId: 1, // 群主id
+                    rank: 1,
+                    parent: 11,
+                    icon: '',
+                    whoRead: 0,
+                    accessRoles: 0,
+                    accessPermissionCode: '',
+                    status: 0
+                  },
+                  childs: []
                 }
               ]
             },
             {
-              name: '虫害',
-              children: []
+              section: {
+                id: 12,
+                name: '虫害',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 1,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '草害',
-              children: []
+              section: {
+                id: 13,
+                name: '草害',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 1,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             }
           ]
         },
         {
-          name: '行情交流',
-          children: [
+          section: {
+            id: 2,
+            name: '行情交流',
+            ownerId: 1, // 群主id
+            rank: 1,
+            parent: 0,
+            icon: '',
+            whoRead: 0,
+            accessRoles: 0,
+            accessPermissionCode: '',
+            status: 0
+          },
+          childs: [
             {
-              name: '粮食',
-              children: []
+              section: {
+                id: 21,
+                name: '粮食',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 2,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '经济作物',
-              children: []
+              section: {
+                id: 22,
+                name: '经济作物',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 2,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '其他作物',
-              children: []
+              section: {
+                id: 23,
+                name: '其他作物',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 2,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             }
           ]
         },
         {
-          name: '农资产品',
-          children: [
+          section: {
+            id: 3,
+            name: '农资产品',
+            ownerId: 1, // 群主id
+            rank: 1,
+            parent: 0,
+            icon: '',
+            whoRead: 0,
+            accessRoles: 0,
+            accessPermissionCode: '',
+            status: 0
+          },
+          childs: [
             {
-              name: '机械',
-              children: []
+              section: {
+                id: 31,
+                name: '机械',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 3,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '农药',
-              children: []
+              section: {
+                id: 32,
+                name: '农药',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 3,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '化肥',
-              children: []
+              section: {
+                id: 33,
+                name: '化肥',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 3,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '种子',
-              children: []
+              section: {
+                id: 34,
+                name: '种子',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 3,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             },
             {
-              name: '真假辨识',
-              children: []
-            }
-          ]
-        },
-        {
-          name: '农资产品',
-          children: [
-            {
-              name: '机械',
-              children: []
-            },
-            {
-              name: '农药',
-              children: []
-            },
-            {
-              name: '化肥',
-              children: []
-            },
-            {
-              name: '种子',
-              children: []
-            },
-            {
-              name: '真假辨识',
-              children: []
+              section: {
+                id: 35,
+                name: '真假辨识',
+                ownerId: 1, // 群主id
+                rank: 1,
+                parent: 3,
+                icon: '',
+                whoRead: 0,
+                accessRoles: 0,
+                accessPermissionCode: '',
+                status: 0
+              },
+              childs: []
             }
           ]
         }
       ],
       communityBarContent: [
         {
-          name: '番茄群',
+          sectionId: 1,
+          groupName: '番茄群',
           src: require('../assets/tomato.jpg'), // 图片存放于assets中需要require,存放于static中则不需要
-          motto: '多C多漂亮',
-          number: 999
+          summary: '多C多漂亮',
+          likes: 999
         },
         {
-          name: '玉米群',
+          sectionId: 2,
+          groupName: '玉米群',
           src: require('../assets/corn.jpg'),
-          motto: '种子不选好，满地长稗草',
-          number: 499
+          summary: '种子不选好，满地长稗草',
+          likes: 499
         },
         {
-          name: '茄子群',
+          sectionId: 3,
+          groupName: '茄子群',
           src: require('../assets/eggplant.png'),
-          motto: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
-          number: 874
+          summary: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
+          likes: 874
         },
         {
-          name: '胡萝卜群',
+          sectionId: 4,
+          groupName: '胡萝卜群',
           src: require('../assets/carrot.jpg'), // 图片存放于assets中需要require,存放于static中则不需要
-          motto: '多C多漂亮',
-          number: 999
+          summary: '多C多漂亮',
+          likes: 999
         },
         {
-          name: '玉米群',
+          sectionId: 5,
+          groupName: '玉米群',
           src: require('../assets/corn.jpg'),
-          motto: '种子不选好，满地长稗草',
-          number: 499
+          summary: '种子不选好，满地长稗草',
+          likes: 499
         },
         {
-          name: '茄子群',
+          sectionId: 6,
+          groupName: '茄子群',
           src: require('../assets/eggplant.png'),
-          motto: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
-          number: 874
+          summary: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
+          likes: 874
         },
         {
-          name: '番茄群',
+          sectionId: 7,
+          groupName: '番茄群',
           src: require('../assets/tomato.jpg'), // 图片存放于assets中需要require,存放于static中则不需要
-          motto: '多C多漂亮',
-          number: 999
+          summary: '多C多漂亮',
+          likes: 999
         },
         {
-          name: '玉米群',
+          sectionId: 8,
+          groupName: '玉米群',
           src: require('../assets/corn.jpg'),
-          motto: '种子不选好，满地长稗草',
-          number: 499
+          summary: '种子不选好，满地长稗草',
+          likes: 499
         },
         {
-          name: '茄子群',
+          sectionId: 9,
+          groupName: '茄子群',
           src: require('../assets/eggplant.png'),
-          motto: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
-          number: 874
+          summary: '一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当一要质，而要量，田间选种不上当',
+          likes: 874
         }
       ],
       isOption2: false, // 第三类选择
@@ -261,22 +457,49 @@ export default {
     }
   },
   methods: {
-    changeStatus: function (index, num) {
+    changeStatus: function (index, id, num) {
       if (num === 1) {
         this.isActive1 = index
-        this.isActive2 = 0
+        this.isActive2 = -1
+        this.isActive3 = -1
+        this.requestCommunityItem(id)
       } else if (num === 2) {
-        this.isActive2 = index
+        if (this.isActive2 !== index || this.isActive2 === -1) {
+          this.isActive2 = index
+          this.isActive3 = -1
+          this.requestCommunityItem(id)
+        } else {
+          this.isActive2 = -1
+          this.isActive3 = -1
+          this.requestCommunityItem(this.chooseBarContent[this.isActive1].section.id) // 取消子节点点击，则获取父id
+        }
       } else if (num === 3) {
         this.isActive3 = index
         this.isOption2 = false
+        this.requestCommunityItem(id)
       }
+    },
+    requestCommunityItem: function (id) { // 根据id,返回属于该id的社群列表
+      console.log(id)
+      this.$axios({ // 待改：请求属于某id的所有社群接口有问题！！！
+        method: 'post',
+        url: 'http://106.15.192.168/group/findBySectionRootId',
+        headers: { 'content-type': 'application/json',
+          'token': this.$store.state.token
+        },
+        data: {
+          sectionId: id
+        }
+      }).then((response) => {
+        // this.communityBarContent = response.data.data
+        console.log(response)
+      })
     },
     option1: function () {
       this.isOption1 = !this.isActive1
     },
     option2: function (e) {
-      if (this.chooseBarContent[this.isActive1].children[this.isActive2].children.length !== 0 && this.isOption2 === false) {
+      if (this.isActive2 !== -1 && this.chooseBarContent[this.isActive1].childs[this.isActive2].childs.length !== 0 && this.isOption2 === false) {
         this.isOption2 = true
       } else {
         this.isOption2 = false
@@ -302,7 +525,37 @@ export default {
     },
     confirmOption1: function () {
       this.isOption1 = !this.isOption1
+    },
+    toCertainCommunity: function (id) {
+      // console.log(id)
+      this.$router.push({ path: '/community_detail', query: { id: id } })
     }
+  },
+  created () {
+    this.$axios({
+      method: 'get',
+      url: 'http://106.15.192.168/section/tree',
+      headers: { 'content-type': 'application/json',
+        'token': this.$store.state.token
+      }
+    }).then((response) => {
+      this.chooseBarContent = response.data.data
+      // console.log(response)
+      console.log('获取板块树成功')
+      this.$axios({ // 待改：请求属于某id的所有社群接口有问题！！！
+        method: 'post',
+        url: 'http://106.15.192.168/group/findBySectionRootId',
+        headers: { 'content-type': 'application/json',
+          'token': this.$store.state.token
+        },
+        data: {
+          sectionId: 5
+        }
+      }).then((response) => {
+        // this.communityBarContent = response.data.data
+        console.log(response)
+      })
+    })
   }
 }
 </script>

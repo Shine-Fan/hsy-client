@@ -3,29 +3,29 @@
     <div style="position:relative;height:100%;top:0;width:90%;margin-bottom:2.6rem">
       <div class="main-area" style="position:absolute;height:100%;width:100%;overflow:scroll;top:0">
         <div class="title">
-          <h4>{{news.title}}</h4>
+          <h4>{{article.title}}</h4>
         </div>
         <div class="from" style="width:95%;display: flex;align-items: center;margin:auto">
-          <div style="margin-right:auto;font-size:0.9rem;color:gray">作者 {{news.author}}</div>
-          <div style="font-size: 0.9rem;color:gray;margin-left:auto">发表时间 {{news.createTime|formatDate}}</div>
-<!--注释了作者导航条-->
-<!--          <router-link to="/community_detail" style="width:100%">-->
-<!--            <div style="width:100%;display: flex;">-->
-<!--              <div style="width:3rem;height:3.5rem;display: flex;align-items: center;justify-content: center">-->
-<!--                <img :src="news.imgSrc" style="width:2.5rem;height:2.5rem;border-radius:50%;">-->
-<!--              </div>-->
-<!--              <div style="width:100%;height:3.5rem;display:flex;flex-direction: column;justify-content: center;margin:0 10px">-->
-<!--                <div style="font-weight: bold;color:black">{{news.author}}</div>-->
-<!--                <div style="font-size:0.8rem;color:gray;">{{news.createTime|formatDate}}</div>-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </router-link>-->
-<!--          <div style="width:3.5rem;height:3.5rem;display: flex;align-items: center;justify-content: center">-->
-<!--            <div style="width:3.5rem;height:1.8rem;line-height:1.8rem;background-color: red;color:white;text-align: center;border-radius:0.2rem">+关注</div>-->
-<!--          </div>-->
+          <div style="margin-right:auto;font-size:0.9rem;color:gray">作者 {{article.authorName}}</div>
+          <div style="font-size: 0.9rem;color:gray;margin-left:auto">发表时间 {{article.createTime|formatDate}}</div>
+          <!--注释了作者导航条-->
+          <!--          <router-link to="/community_detail" style="width:100%">-->
+          <!--            <div style="width:100%;display: flex;">-->
+          <!--              <div style="width:3rem;height:3.5rem;display: flex;align-items: center;justify-content: center">-->
+          <!--                <img :src="news.imgSrc" style="width:2.5rem;height:2.5rem;border-radius:50%;">-->
+          <!--              </div>-->
+          <!--              <div style="width:100%;height:3.5rem;display:flex;flex-direction: column;justify-content: center;margin:0 10px">-->
+          <!--                <div style="font-weight: bold;color:black">{{news.author}}</div>-->
+          <!--                <div style="font-size:0.8rem;color:gray;">{{news.createTime|formatDate}}</div>-->
+          <!--              </div>-->
+          <!--            </div>-->
+          <!--          </router-link>-->
+          <!--          <div style="width:3.5rem;height:3.5rem;display: flex;align-items: center;justify-content: center">-->
+          <!--            <div style="width:3.5rem;height:1.8rem;line-height:1.8rem;background-color: red;color:white;text-align: center;border-radius:0.2rem">+关注</div>-->
+          <!--          </div>-->
         </div>
-        <div class="content" v-html="news.content">
-          {{news.content}}
+        <div class="content" v-html="article.content">
+          {{article.content}}
         </div>
         <div style="font-size:0.8rem;color:gray;margin:8px 0;">1000阅读</div>
         <div class="comment-area">
@@ -39,7 +39,7 @@
                            :key="index1"
                            :comment = "item1.comment"
               ></comment-bar>
-          </div>
+            </div>
           </div>
         </div>
       </div>
@@ -79,33 +79,22 @@
 <script>
 // v-model:数据双向绑定,主要用于表单元素,其中之一变化,另一个随之改变;v-bind:数据动态绑定,监听数据变化
 import commentBar from '../components/commentBar'
-function formatDateTime (value) {
-  var date = new Date(value)
-  var M = date.getMonth() + 1
-  M = M < 10 ? '0' + M : M
-  var d = date.getDate()
-  d = d < 10 ? '0' + d : d
-  var h = date.getHours()
-  h = h < 10 ? '0' + h : h
-  var m = date.getMinutes()
-  m = m < 10 ? '0' + m : m
-  return M + '-' + d + ' ' + h + ':' + m
-}
 export default {
-  name: 'newsDetail',
+  name: 'communityArticle',
   components: {
     commentBar
   },
   data: function () {
     return {
-      news: {
+      article: {
         id: 1,
         title: '灾害损失减少30%、整精米率提高8%——水稻新品种“中科发5号”选育成功',
         content: '<p style="text-indent: 2rem; margin:8px 0;">9月11日，国审稻新品种“中科发5号”及中科发系列新品种现场会在吉林省吉林市举行。在2000亩示范片中，“中科发5号”等新品种在产量、抗稻瘟病、抗倒伏等农艺性状中表现突出，外观品质优、食味佳，丰收在即。</p>\n' +
-              '          <img src="/img/corn.213685da.jpg" style="width:70%;height:auto;margin:8px 0;">\n' +
-              '          <p style="text-indent: 2rem; margin:8px 0;">中科发系列粳稻新品种，是中国科学院遗传与发育生物学研究所李家洋院士与合作者联合，针对东北地区最主要的优质米品种“稻花香”在生产中所遇到的问题，以优异稻米品质基因、抗倒伏和抗稻瘟病等基因为主线，结合高产及理想株型基因等，运用分子模块设计育种的理念和技术，经过精心设计，选育而成的具有优质、高产、抗稻瘟病和抗倒的中科发系列粳稻新品种。“中科804”于2017年通过国家审定（国审稻20170080），“中科发5号”（国审稻20180077）和中科发6号(国审稻20180071）于2018年通过国家审定。其中,“中科804”在黑龙江五常市稻花香主产区3000亩示范片中脱颖而出，示范推广工作当选中国科学院2018年第3季度和全年的科技创新亮点成果及科技成果转移转化亮点成果，并入选2018年中国十大科技进展新闻。2019年“中科804”推广应用面积已达20万亩以上。</p>\n' +
-              '          <p style="text-indent: 2rem; margin:8px 0;">目前，“中科发5号”等品种的大面积示范推广工作正在进行。2019年“中科发5号”共示范20000多亩，在黑龙江、吉林、辽宁、宁夏、内蒙共布置了40多个百亩以上示范片，其中在吉林省吉林市布置了2000亩连片示范片，目前所有示范片及生产上均长势优良，同稻花香相比，“中科发5号”和“中科804”预计增产100kg/亩以上，抗稻瘟病和抗倒伏等抗逆性强可减少灾害损失30%，品质优良，口感更佳，尤其是整精米率，比稻花香提高8%以上。随着这些品种的大面积推广种植，其优良性状所带来的经济和社会效益将日趋凸显。</p>\n',
-        author: '水稻专家',
+                        '          <img src="/img/corn.213685da.jpg" style="width:70%;height:auto;margin:8px 0;">\n' +
+                        '          <p style="text-indent: 2rem; margin:8px 0;">中科发系列粳稻新品种，是中国科学院遗传与发育生物学研究所李家洋院士与合作者联合，针对东北地区最主要的优质米品种“稻花香”在生产中所遇到的问题，以优异稻米品质基因、抗倒伏和抗稻瘟病等基因为主线，结合高产及理想株型基因等，运用分子模块设计育种的理念和技术，经过精心设计，选育而成的具有优质、高产、抗稻瘟病和抗倒的中科发系列粳稻新品种。“中科804”于2017年通过国家审定（国审稻20170080），“中科发5号”（国审稻20180077）和中科发6号(国审稻20180071）于2018年通过国家审定。其中,“中科804”在黑龙江五常市稻花香主产区3000亩示范片中脱颖而出，示范推广工作当选中国科学院2018年第3季度和全年的科技创新亮点成果及科技成果转移转化亮点成果，并入选2018年中国十大科技进展新闻。2019年“中科804”推广应用面积已达20万亩以上。</p>\n' +
+                        '          <p style="text-indent: 2rem; margin:8px 0;">目前，“中科发5号”等品种的大面积示范推广工作正在进行。2019年“中科发5号”共示范20000多亩，在黑龙江、吉林、辽宁、宁夏、内蒙共布置了40多个百亩以上示范片，其中在吉林省吉林市布置了2000亩连片示范片，目前所有示范片及生产上均长势优良，同稻花香相比，“中科发5号”和“中科804”预计增产100kg/亩以上，抗稻瘟病和抗倒伏等抗逆性强可减少灾害损失30%，品质优良，口感更佳，尤其是整精米率，比稻花香提高8%以上。随着这些品种的大面积推广种植，其优良性状所带来的经济和社会效益将日趋凸显。</p>\n',
+        authorId: 0,
+        authorName: '水稻专家',
         createTime: 1563174571000,
         imgSrc: require('../assets/corn.jpg')
       },
@@ -321,26 +310,27 @@ export default {
     // 获取新闻内容
     this.$axios({
       method: 'post',
-      url: 'http://106.15.192.168/news/find_one',
+      url: 'http://106.15.192.168/article/find',
       data: {
         id: id
       },
-      header: { 'content-type': 'application/json' }
+      headers: { 'content-type': 'application/json',
+        'token': this.$store.state.token }
     }).then((response) => {
-      // this.news = response.data.data
-      console.log('获取文章成功')
+      // this.article = response.data.data
+      console.log(response)
       // 获取新闻评论
-      this.$axios({
-        method: 'post',
-        url: 'http://106.15.192.168/news/comment/find',
-        data: {
-          postId: id
-        },
-        header: { 'content-type': 'application/json' }
-      }).then((response) => {
-        // this.commentList = response.data.data
-        console.log('获取评论成功')
-      })
+      // this.$axios({
+      //   method: 'post',
+      //   url: 'http://106.15.192.168/news/comment/find',
+      //   data: {
+      //     postId: id
+      //   },
+      //   header: { 'content-type': 'application/json' }
+      // }).then((response) => {
+      //   // this.commentList = response.data.data
+      //   console.log('获取评论成功')
+      // })
     })
   },
   filters: {
@@ -364,35 +354,35 @@ export default {
 </script>
 
 <style scoped>                      /*display:flex,上下两元素会发生边距重叠*/
-  .main-area::-webkit-scrollbar{
-    display: none;
-  }
-  .title{
-    margin:10px 0;
-  }
-  .from{
-    margin:10px 0;
-  }
-  .content{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  .content p{
-    text-indent: 2rem; /*段首空两个字符*/
-    margin:8px 0;
-  }
-  .content img{
-    margin:8px 0;
-  }
-  .comment-area{
-    margin-top:20px;
-  }
-  .writing{
-    color:royalblue !important;
-  }
-  .send-btn:active{
-    color:darkblue !important;
-  }
+.main-area::-webkit-scrollbar{
+  display: none;
+}
+.title{
+  margin:10px 0;
+}
+.from{
+  margin:10px 0;
+}
+.content{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.content p{
+  text-indent: 2rem; /*段首空两个字符*/
+  margin:8px 0;
+}
+.content img{
+  margin:8px 0;
+}
+.comment-area{
+  margin-top:20px;
+}
+.writing{
+  color:royalblue !important;
+}
+.send-btn:active{
+  color:darkblue !important;
+}
 
 </style>
