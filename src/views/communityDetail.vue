@@ -10,32 +10,30 @@
       <div style="display: flex;flex-direction:column;width:70%">
         <div style="display: flex;align-items: center;justify-content: space-around">
           <div>
-            <div class="title-num">1234</div>
+            <div class="title-num">{{articleList.length}}</div>
             <div class="title-item">发表</div>
           </div>
           <div>
-            <div class="title-num">1234</div>
+            <div class="title-num">{{likes}}</div>
             <div class="title-item">关注</div>
           </div>
           <div>
-            <div class="title-num">1234</div>
+            <div class="title-num">{{likes}}</div>
             <div class="title-item">粉丝</div>
           </div>
           <div>
-            <div class="title-num">1234</div>
+            <div class="title-num">{{likes}}</div>
             <div class="title-item">获赞</div>
           </div>
         </div>
         <div style="display:flex;align-items: center;justify-content: space-around">
-          <router-link to="/community_chat_info">
-            <div style="margin:0.6rem 0;padding:2px 0.8rem;border:1px solid #eeeeee;border-radius:0.2rem;letter-spacing:1px">社群聊天室</div>
-          </router-link>
+          <div style="margin:0.6rem 0;padding:2px 0.8rem;border:1px solid #eeeeee;border-radius:0.2rem;letter-spacing:1px" @click="intoChatRoom">社群聊天室</div>
           <div style="margin:0.6rem 0;padding:2px 0.8rem;border-radius:0.2rem;letter-spacing:1px;background-color:red;color:white">+关注</div>
         </div>
       </div>
     </div>
     <div class="intro-area">
-      <span>简介：{{introduction}}</span>
+      <span>简介:&nbsp;{{introduction}}</span>
     </div>
     <div style="width:100%;height:6px;background-color: #efefef;"></div>
     <div class="choose-area">
@@ -45,7 +43,7 @@
         <div class="choose-item" :class="{active:itemNum === 3}" @click="change_item(3)">视频</div>
       </div>
       <div class="choose-content">
-        <community-bar-in-detail v-for="(item,index) in newsList"
+        <community-bar-in-detail v-for="(item,index) in articleList"
                                  :key="index"
                                  :item="item"
                                  @toCertainArticle="toCertainArticle"
@@ -66,8 +64,12 @@ export default {
     return {
       itemNum: 1,
       isFix: false,
+      likes: 1234,
+      chatRoomId: null,
+      sectionId: null,
+      groupName: '农科小能手',
       introduction: '“中科发5号”等新品种在产量、抗病等农艺性状中表现突出，外观品质优、食味佳，丰收在即。',
-      newsList: [
+      articleList: [
         {
           id: 1,
           usr_img: require('../assets/news7.jpg'),
@@ -132,6 +134,9 @@ export default {
         this.isFix = false
       }
       // console.log(this.isFix)
+    },
+    intoChatRoom () {
+      this.$router.push({ path: '/community_chat_info', query: { id: this.chatRoomId } })
     }
   },
   created () {
@@ -139,12 +144,27 @@ export default {
     console.log(id)
     this.$axios({
       method: 'post',
-      url: 'http://106.15.192.168/group/findById',
+      url: 'http://106.15.192.168/group/findById', // 根据id获取某个社群的主要信息
       headers: { 'content-type': 'application/json',
         'token': this.$store.state.token },
-      data: { id: id }
+      data: { id: 6 }
     }).then((response) => {
       console.log(response)
+      var sectionInfo = response.data.data
+      this.groupName = sectionInfo.groupName
+      this.introduction = sectionInfo.summary
+      this.likes = sectionInfo.likes
+      this.chatRoomId = sectionInfo.chatRoomId
+      this.sectionId = sectionInfo.sectionId
+      this.$axios({
+        method: 'post',
+        url: 'http://106.15.192.168/article/find_section', // 请求某社群下的文章列表
+        headers: { 'content-type': 'application/json',
+          'token': this.$store.state.token },
+        data: { sectionId: this.sectionId }
+      }).then((response) => {
+        console.log(response)
+      })
     })
   },
   mounted () {
@@ -169,6 +189,7 @@ export default {
     align-items: center;
   }
   .title-num{
+    text-align:center;
     font-size:1.1rem;
     font-weight: bold;
   }
@@ -184,7 +205,7 @@ export default {
     margin:0.6rem auto;
     letter-spacing: 1px;
     display:flex;
-    justify-content: center;
+    justify-content: flex-start;
   }
   .fixbar{
     position:fixed;

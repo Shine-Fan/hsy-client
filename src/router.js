@@ -11,12 +11,17 @@ import communityDetail from './views/communityDetail'
 import search from './views/search'
 import login from './views/login'
 import certificateSearch from './views/certificateSearch'
-import searchLineChart from './views/searchLineChart'
+// import searchLineChart from './views/searchLineChart'
 import communityArticle from './views/communityArticle'
 import searchMultiLineChart from './views/searchMultiLineChart'
 import searchPieChart from './views/searchPieChart'
-
+import searchMainChart from './views/searchMainChart'
+import test from './views/test'
 Vue.use(Router)
+// const originalPush = Router.prototype.push
+// Router.prototype.push = function push (location) {
+//   return originalPush.call(this, location).catch(err => err)
+// }
 export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
@@ -37,20 +42,33 @@ export default new Router({
       component: login
     },
     {
-      path: '/search_line_chart',
-      name: 'searchLineChart',
-      component: searchLineChart
+      path: '/search_main_chart',
+      name: 'searchMainChart',
+      component: searchMainChart,
+      // redirect: '/search_main_chart/search_multi_line_chart',
+      children: [
+        {
+          path: 'search_multi_line_chart',
+          name: 'searchMultiLineChart',
+          component: searchMultiLineChart
+        },
+        {
+          path: 'search_pie_chart',
+          name: 'searchPieChart',
+          component: searchPieChart
+        }
+      ]
     },
     {
-      path: '/search_multi_line_chart',
-      name: 'searchMultiLineChart',
-      component: searchMultiLineChart
+      path: '/test',
+      name: 'test',
+      component: test
     },
-    {
-      path: '/search_pie_chart',
-      name: 'searchPieChart',
-      component: searchPieChart
-    },
+    // {
+    //   path: '/search_pie_chart',
+    //   name: 'searchPieChart',
+    //   component: searchPieChart
+    // },
     {
       path: '/certificate_search',
       name: 'certificateSearch',

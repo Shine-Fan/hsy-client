@@ -6,7 +6,7 @@
 <!--      <i v-else class="fa fa-minus" style="width:1.2rem;height:1.2rem;color:gray;border:2px solid gray;border-radius:50%;text-align: center;margin:1rem"></i>-->
 <!--    </div>-->
     <div style="width:100%">
-      <div v-if="showFlag" style="margin-top:1rem;width:100%;display:flex;flex-direction: column;margin-bottom:5px;padding-bottom:1rem;box-shadow: 1px 2px 3px grey;">
+      <div v-if="showFlag" style="margin-top:1rem;padding-top:10px;width:100%;display:flex;flex-direction: column;margin-bottom:5px;padding-bottom:1rem;box-shadow: 1px 2px 3px grey;">
         <div class="result-item">
           <div class="result-title">类别</div>
           <div>{{this.showKind1}}</div>
@@ -23,13 +23,9 @@
           <div class="result-title">市场</div>
           <div>{{showLocation2}}</div>
         </div>
-        <div class="result-item">
-          <div class="result-title">时间</div>
-          <div>{{startTime}} 至 {{endTime}}</div>
-        </div>
         <button style="margin:0 3rem 0 15px;width:3rem;align-self: flex-end" @click="cancel">删除</button>
       </div>
-      <div v-else id="choose_area" style="position:relative;top:0rem;width:100%;height:18.5rem;display:flex;flex-direction:column;align-items: center">
+      <div v-else id="choose_area" style="position:relative;top:0rem;width:100%;height:15rem;display:flex;flex-direction:column;align-items: center">
         <div class="choose-item" style="top:0rem;">
           <div style="width:20%;">类别</div>
           <select style="width:70%;background-color:white" name="product" v-model="kind1_temp" onmousedown="if(this.options.length > 5){this.size = 5;this.style.zIndex=1;}
@@ -76,13 +72,7 @@
             </option>
           </select>
         </div>
-        <div style="width:90%;display:flex;position:absolute;top:12.5rem;justify-content: space-around">
-          <input style="width:140px" type="date" v-model="startTime_temp"/>
-          <div>至</div>
-          <input style="width:140px" type="date" v-model="endTime_temp"/>
-        </div>
-        <div style="width:90%;position: absolute;top:14.5rem;font-size: 0.9rem;color:gray;text-align: center">注：请选择整周、整月、整年时间段</div>
-        <div style="display:flex;justify-content: center;position:absolute;top:16rem">
+        <div style="display:flex;justify-content: center;position:absolute;top:12.5rem">
           <button style="margin:0 15px 0 15px;width:3rem;" @click="confirm">确定</button>
           <button style="margin:0 15px 0 15px;width:3rem;" @click="cancel">取消</button>
         </div>
@@ -103,8 +93,9 @@ export default {
     kind2: Number,
     location1: Number,
     location2: Number,
-    startTime: String,
-    endTime: String
+    // startTime: String,
+    // endTime: String,
+    determined: Boolean
   },
   data: function () {
     return {
@@ -114,9 +105,9 @@ export default {
       kind2_temp: this.kind2,
       location1_temp: this.location1,
       location2_temp: this.location2,
-      startTime_temp: this.startTime,
-      endTime_temp: this.endTime,
-      showFlag: false
+      // startTime_temp: this.startTime,
+      // endTime_temp: this.endTime,
+      showFlag: this.determined
     }
   },
   computed: {
@@ -144,28 +135,33 @@ export default {
       this.showFlag = !this.showFlag
     },
     confirm () {
-      console.log('confirm')
-      this.showFlag = !this.showFlag
-      // if (this.id_temp > -1 && this.kind1_temp > -1 && this.kind2_temp > -1 && this.location1_temp > -1 && this.location2_temp > -1)
-      var lineTemp = {}
-      lineTemp.index = this.index_temp
-      lineTemp.data = {}
-      lineTemp.data.id = this.id_temp
-      lineTemp.data.kind1 = this.kind1_temp
-      lineTemp.data.kind2 = this.kind2_temp
-      lineTemp.data.location1 = this.location1_temp
-      lineTemp.data.location2 = this.location2_temp
-      lineTemp.data.startTime = this.startTime_temp
-      lineTemp.data.endTime = this.endTime_temp
-      this.$emit('confirmChooseBar', lineTemp)
+      if (this.kind1_temp !== -1 && this.kind2_temp !== -1 && this.location1_temp !== -1 && this.location2_temp !== -1 && this.startTime_temp !== '' && this.endTime_temp !== '') {
+        console.log('confirm')
+        this.showFlag = !this.showFlag
+        // if (this.id_temp > -1 && this.kind1_temp > -1 && this.kind2_temp > -1 && this.location1_temp > -1 && this.location2_temp > -1)
+        var lineTemp = {}
+        lineTemp.index = this.index_temp
+        lineTemp.data = {}
+        lineTemp.data.id = this.id_temp
+        lineTemp.data.determined = this.showFlag
+        lineTemp.data.kind1 = this.kind1_temp
+        lineTemp.data.kind2 = this.kind2_temp
+        lineTemp.data.location1 = this.location1_temp
+        lineTemp.data.location2 = this.location2_temp
+        // lineTemp.data.startTime = this.startTime_temp
+        // lineTemp.data.endTime = this.endTime_temp
+        this.$emit('confirmChooseBar', lineTemp)
+      } else {
+        console.log('参数选择不全，请将参数选择完整！')
+      }
     },
     reset () {
       this.kind1_temp = -1
       this.kind2_temp = -1
       this.location1_temp = -1
       this.location2_temp = -1
-      this.startTime_temp = ''
-      this.endTime_temp = ''
+      // this.startTime_temp = ''
+      // this.endTime_temp = ''
       this.$emit('resetChooseBar', this.id_temp)
     },
     cancel () {

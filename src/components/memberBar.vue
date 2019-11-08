@@ -3,7 +3,7 @@
     <div style="width:25%;display: flex;align-items: center;justify-content: center;">
       <img :src="imgSrc" style="width:4rem;height:4rem;border-radius: 50%;">
     </div>
-    <div style="width:75%;display: flex;align-items: center;padding-left:0.5rem;font-size:1.1rem">
+    <div style="width:75%;display: flex;align-items: center;padding-left:0.5rem;font-size:1rem">
       {{memberName}}
     </div>
   </div>

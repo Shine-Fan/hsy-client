@@ -2,7 +2,7 @@
   <div style="position:absolute;top:0;height:100%;background-color:#ececec;overflow:scroll;">
     <div class="title">
       <div class="title-img">
-        <img src="../assets/tomato.jpg" >
+        <img src="../assets/news7.jpg" >
       </div>
       <div class="title-text">
         <div style="font-size:1.1rem">社群名称</div>
@@ -33,13 +33,16 @@
         此处为社群简介内容！
       </div>
     </div>
-    <router-link to="/chat_room">
-      <div class="intoChat">
-        <div class="intoChatBtn">
-          进入社群
-        </div>
+    <div v-if="!isMember" class="intoChat">
+      <div class="intoChatBtn">
+        申请加入群聊
       </div>
-    </router-link>
+    </div>
+    <div v-if="isMember" class="intoChat">
+      <div class="intoChatBtn">
+        进入社群聊条
+      </div>
+    </div>
   </div>
 </template>
 
@@ -52,6 +55,7 @@ export default {
   },
   data: function () {
     return {
+      isMember: false,
       member: [
         {
           src: require('../assets/tomato.jpg'),
@@ -92,6 +96,9 @@ export default {
         }
       ]
     }
+  },
+  created () {
+    var id = this.$route.query.id
   }
 }
 </script>

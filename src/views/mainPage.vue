@@ -55,7 +55,7 @@
           <div>证书查询</div>
         </div>
         <div style="height:4rem;width:1px;background-color:#ddd;"></div>
-        <div class="layer-item">
+        <div class="layer-item" @click="totest">
           <img class="layer-item" src="../assets/bug.png"/>
           <div>病虫害识别</div>
         </div>
@@ -215,12 +215,17 @@ export default {
       })
     },
     toSearchLineChartPage: function () {
-      this.$router.push({ path: '/search_pie_chart' })
+      // this.$router.push({ path: '/search_pie_chart' })
       // this.$router.push({ path: '/search_multi_line_chart' })
       //   this.$router.push({ path: '/search_line_chart' })
+      this.$router.push({ path: '/search_main_chart' })
     },
     toCertificateSearchPage: function () {
-      this.$router.push({ path: '/certificate_search' })
+      this.$router.push({ path: '/search_pie_chart' })
+      // this.$router.push({ path: '/certificate_search' })
+    },
+    totest: function () {
+      this.$router.push('/test')
     },
     toCommunityPage: function (index) {
       this.$router.push({ path: '/community', query: { type: index } })

@@ -4,7 +4,7 @@
       <div class="tool-item">单产品查询</div>
       <div class="tool-item">对比查询</div>
     </div>
-    <div id="choose_area" style="position:relative;top:1rem;width:90%;display:flex;flex-direction:column;align-items: center">
+    <div id="choose_area" style="position:relative;top:1rem;width:90%;height:19.5rem;display:flex;flex-direction:column;align-items: center">
       <div class="choose-item" style="top:0;">
         <div style="width:20%;">类别</div>
         <select style="width:70%;background-color:white" name="product" v-model="kind1" onmousedown="if(this.options.length > 5){this.size = 5;this.style.zIndex=1;}
@@ -160,10 +160,11 @@ export default {
             'token': this.$store.state.token
           },
           data: {
-            marketPlace: this.show_location1[this.location1].childs[this.location2].farmProductsPlaceDB.marketName,
-            productName: this.show_kind1[this.kind1].childs[this.kind2].farmProductsName.productsName,
-            startTime: this.startTime,
-            endTime: this.endTime
+            times: 1,
+            marketPlace1: this.show_location1[this.location1].childs[this.location2].farmProductsPlaceDB.marketName,
+            productName1: this.show_kind1[this.kind1].childs[this.kind2].farmProductsName.productsName,
+            startTime1: this.startTime,
+            endTime1: this.endTime
           }
         }).then((response) => {
           console.log(response)
